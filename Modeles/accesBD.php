@@ -23,12 +23,14 @@ class accesBD
 		$this->passwd="";
 		$this->base="videoppe3";
 
-		// ORDI DEV2
-		/*$this->hote = "localhost";
+		/* ORDI DEV2
+		$this->hote = "172.16.0.50";
 		$this->port = "";
-		$this->login = "Panda";
-		$this->passwd = "UgbNu74!";
-		$this->base = "videoppe3";*/
+		$this->login = "ALT19CRUSSON";
+		$this->passwd = "Root_123";
+		$this->base = "PPE3_Erard_Crusson";*/
+
+
 		$this->connexion();
 
 		}
@@ -40,15 +42,14 @@ class accesBD
 	{
 		try
         {
-			//echo "sqlsrv:server=$this->hote$this->port;Database=$this->base"." | ".$this->login." | ".$this->passwd;
-			// Pour SQL Server
-			//$this->conn = new PDO("sqlsrv:server=$this->hote$this->port;Database=$this->base", $this->login, $this->passwd);
-			//$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
-			$this->conn = new PDO("mysql:host=".$this->hote.";dbname=".$this->base.";charset=utf8", $this->login, $this->passwd);
+					//echo "sqlsrv:server=$this->hote$this->port;Database=$this->base"." | ".$this->login." | ".$this->passwd;
+					// Pour SQL Server
+					/*$this->conn = new PDO("sqlsrv:server=$this->hote$this->port;Database=$this->base", $this->login, $this->passwd);
+					$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );*/
 
-            // Pour Mysql/MariaDB
-            /*$this->conn = new PDO("mysql:dbname=$this->base;host=$this->hote",$this->login, $this->passwd);*/
-            $this->boolConnexion = true;
+					//SQL
+						$this->conn = new PDO("mysql:dbname=$this->base;host=$this->hote",$this->login, $this->passwd);
+						$this->boolConnexion = true;
         }
         catch(PDOException $e)
         {
@@ -98,7 +99,7 @@ class accesBD
 		//génération automatique de l'identifiant
 		$sonId = $this->donneProchainIdentifiant("client","idClient");
 
-		$requete = $this->conn->prepare("INSERT INTO CLIENT (nomClient,prenomClient, emailClient, dateAbonnementClient,loginClient, pwdClient) VALUES (?,?,?,?,?,?)");
+		$requete = $this->conn->prepare("INSERT INTO CLIENT (nomClient,prenomClient, emailClient, dateAbonnementClient,login, pwd,actif) VALUES (?,?,?,?,?,?,0)");
 		//définition de la requête SQL
 		$requete->bindValue(1,$unNomClient);
 		$requete->bindValue(2,$unPrenomClient);
@@ -265,6 +266,12 @@ class accesBD
 		return $sonId;
 		}
 
+		//Verification Compte actif
+		public function verificationActif($unIdClient)
+		{
+
+		}
+
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-----------------------------EXECUTION D'UNE REQUETE---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -312,8 +319,7 @@ class accesBD
 		{
 		//$prochainId[0]=0;
 		//définition de la requête SQL
-		$stringQuery = $this->specialCase("SELECT * FROM ",$uneTable);
-		echo $stringQuery;
+		$stringQuery = $this->specialCase("SELECT * FROM ",$uneTable,"  ORDER BY idClient");
 		$requete = $this->conn->prepare($stringQuery);
 		$requete->bindValue(1,$unIdentifiant);
 
@@ -342,7 +348,6 @@ class accesBD
 		//$prochainId[0]=0;
 		//définition de la requête SQL
 		$stringQuery = $this->specialCase("SELECT MAX(NUMSAISON) FROM ",$uneTable,"WHERE idSerie = ",$unIdentifiantSerie,";");
-		echo $stringQuery;
 		$requete = $this->conn->prepare($stringQuery);
 		$requete->bindValue(1,$unIdentifiantSerie);
 
@@ -371,7 +376,6 @@ class accesBD
 		//$prochainId[0]=0;
 		//définition de la requête SQL
 		$stringQuery = $this->specialCase("SELECT MAX(NUMEPISODE) FROM ",$uneTable,"WHERE IDSERIE = ",$unIdentifiantSerie," AND IDSAISON =",$unIdSaison,";");
-		echo $stringQuery;
 		$requete = $this->conn->prepare($stringQuery);
 		$requete->bindValue(1,$unIdentifiantSerie);
 

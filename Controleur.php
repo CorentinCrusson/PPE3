@@ -90,7 +90,7 @@ class Controleur
 			//CAS visualisation de mes informations-------------------------------------------------------------------------------------------------
 			case 'visualiser' :
 				//ici il faut pouvoir avoir accès au information de l'internaute connecté
-				require 'Vues/construction.php';
+				require 'Vues/profil.php';
 				break;
 
 			//CAS enregistrement d'une modification sur le compte------------------------------------------------------------------------------
@@ -101,6 +101,7 @@ class Controleur
 			//CAS ajouter un utilisateur ------------------------------------------------------------------------------
 			case 'nouveauLogin' :
 				// ici il faut pouvoir recuperer un nouveau utilisateur
+				if (!isset($unNom)) {
 				$unNom = $_POST['nomClient'];
 				$unPrenom = $_POST['prenomClient'];
 				$unEmail = $_POST['emailClient'];
@@ -108,18 +109,17 @@ class Controleur
 				$unLogin = $_POST['login'];
 				$unPassword = $_POST['password'];
 
-				$this->maVideotheque->ajouteUnClient($this->maVideotheque->donneNbClients()+1,$unNom,$unPrenom,$unEmail,$uneDate,$unLogin,$unPassword);
-				$resultat=$this->maVideotheque->verifLogin($unLogin, $unPassword);
-				if($resultat==1)
-					require 'Vues/menu.php';
+				$this->maVideotheque->ajouteUnClient($unNom,$unPrenom,$unEmail,$uneDate,$unLogin,$unPassword);
+			}
+				require 'Vues/inscription.php';
 				break;
 			//CAS verifier un utilisateur ------------------------------------------------------------------------------
 			case 'verifLogin' :
 				// ici il faut pouvoir vérifier un login un nouveau utilisateur
 				//Je récupère les login et password saisi et je verifie leur existancerequire
 				//pour cela je verifie dans le conteneurClient via la gestion.
-				$unLogin=$_GET['login'];
-				$unPassword=$_GET['password'];
+				$unLogin=$_POST['login'];
+				$unPassword=$_POST['password'];
 				$resultat=$this->maVideotheque->verifLogin($unLogin, $unPassword);
 						//si le client existe alors j'affiche le menu et la page visuGenre.php
 						if($resultat==1)
