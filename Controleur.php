@@ -96,7 +96,7 @@ class Controleur
 			//CAS enregistrement d'une modification sur le compte------------------------------------------------------------------------------
 			case 'modifier' :
 				// ici il faut pouvoir modifier le mot de passe de l'utilisateur
-				require 'Vues/construction.php';
+				require 'Vues/modifClient.php';
 				break;
 			//CAS ajouter un utilisateur ------------------------------------------------------------------------------
 			case 'nouveauLogin' :
@@ -124,6 +124,7 @@ class Controleur
 						//si le client existe alors j'affiche le menu et la page visuGenre.php
 						if($resultat==1)
 						{
+							$_SESSION['login'] = $unLogin;
 							require 'Vues/menu.php';
 							echo $this->maVideotheque->listeLesGenres();
 						}

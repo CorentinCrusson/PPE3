@@ -6,15 +6,26 @@ function chargerPage()
 {
 	$monControleur = new Controleur();
 	$monControleur->afficheEntete();
-		if(isset($_POST['login']))
+		if (isset($_SESSION['login']))
 		{
 				if ((isset($_GET['vue'])) && (isset($_GET['action'])))
-				{   $monControleur->affichePage($_GET['action'],$_GET['vue']);
+				{
+					$monControleur->affichePage($_GET['action'],$_GET['vue']);
+				} else {
+					premier_affichage();
 				}
 		}
 		else
 		{
-					premier_affichage();
+			if((isset($_GET['action'])))
+			{
+				if($_GET['action'] == 'verifLogin')
+				{
+					$monControleur->affichePage($_GET['action'],$_GET['vue']);
+				}
+			} else {
+				premier_affichage();
+			}
 		}
 	$monControleur->affichePiedPage();
 }
