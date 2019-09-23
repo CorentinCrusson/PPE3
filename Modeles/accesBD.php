@@ -267,9 +267,26 @@ class accesBD
 		}
 
 		//Verification Compte actif
-		public function verificationActif($unIdClient)
+		public function verificationActif($unLogin)
 		{
+			$requete = $this->conn->prepare("SELECT actif FROM client WHERE login = '".$unLogin."';");
 
+			if(!$requete->execute())
+			{
+				die("Erreur dans la demande : ".$requete->errorCode());
+			}
+
+			return $requete->fetch()[0];
+		}
+
+		public function updateClient($unId,$unNom,$unPrenom,$unMail,$unPassword)
+		{
+			$requete = $this->conn->prepare("UPDATE CLIENT set nomClient = '".$unNom."',prenomClient = '".$unPrenom."', emailClient = '".$unMail."', pwd = '".$unPassword."' WHERE idClient = ".$unId.";");
+
+			if(!$requete->execute())
+			{
+				die("Erreur dans modifClient : ".$requete->errorCode());
+			}
 		}
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

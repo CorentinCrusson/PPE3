@@ -101,7 +101,6 @@ class Controleur
 			//CAS ajouter un utilisateur ------------------------------------------------------------------------------
 			case 'nouveauLogin' :
 				// ici il faut pouvoir recuperer un nouveau utilisateur
-				if (!isset($unNom)) {
 				$unNom = $_POST['nomClient'];
 				$unPrenom = $_POST['prenomClient'];
 				$unEmail = $_POST['emailClient'];
@@ -110,39 +109,122 @@ class Controleur
 				$unPassword = $_POST['password'];
 
 				$this->maVideotheque->ajouteUnClient($unNom,$unPrenom,$unEmail,$uneDate,$unLogin,$unPassword);
-			}
 				require 'Vues/inscription.php';
 				break;
+
+			case "modification":
+				$unNom = $_POST['nomClient'];
+				$unPrenom = $_POST['prenomClient'];
+				$unEmail = $_POST['mailClient'];
+				$unPassword = $_POST['passwdClient'];
+/*
+					if (empty($idPers))
+					{
+						$message = "Veuillez saisir les informations sur la Personne Physique à modifier";
+						$lien = 'index.php?vue=persPhysique&action=modifier';
+						$_SESSION['message'] = $message;
+						$_SESSION['lien'] = $lien;
+						require 'Vues/erreur.php';
+					}*/
+						$this->maVideotheque->modifClient($unNom, $unPrenom, $unEmail, $unPassword);
+						echo "</nav>
+								<div class='container h-100'>
+									<div class='row h-100 justify-content-center align-items-center'>
+										<span class='text-white'>Modification Effectuée</span>
+									</div>
+								</div>
+								<meta http-equiv='refresh' content='1;index.php?vue=compte&action=verifLogin'>";
+					break;
+
 			//CAS verifier un utilisateur ------------------------------------------------------------------------------
 			case 'verifLogin' :
 				// ici il faut pouvoir vérifier un login un nouveau utilisateur
 				//Je récupère les login et password saisi et je verifie leur existancerequire
 				//pour cela je verifie dans le conteneurClient via la gestion.
-				$unLogin=$_POST['login'];
-				$unPassword=$_POST['password'];
-				$resultat=$this->maVideotheque->verifLogin($unLogin, $unPassword);
-						//si le client existe alors j'affiche le menu et la page visuGenre.php
-						if($resultat==1)
+				if (isset($_SESSION['login'])) {
+					$resultat = 1;
+				}
+				else
+				{
+
+					$unLogin=$_POST['login'];
+					$unPassword=$_POST['password'];
+					/*if(isset($_POST['login']) && isset($_POST['password']))
+					{*/
+						$resultat=$this->maVideotheque->verifLogin($unLogin, $unPassword);
+				  //}
+					}
+							//si le client existe alors j'affiche le menu et la page visuGenre.php
+							if($resultat==1)
+							{
+								if(!isset($_SESSION['login']))
+									$_SESSION['login'] = $unLogin;
+								require 'Vues/menu.php';
+								echo $this->maVideotheque->listeLesGenres();
+							}
+							else
+							{
+								// destroy la session et je repars sur l'acceuil en affichant un texte pour prévenir la personne
+								//des mauvais identifiants;
+								session_destroy();
+
+								/*Si resultat = 0 alors Identifiants Incorrents
+									Sinon si resultat = 2 alors Abonnement non Actif */
+
+								switch($resultat)
+								{
+									case 0:
+										$retour = "Identifiants Incorrects";
+										break;
+									case 2:
+										$retour = "Abonnement Non Actif";
+										break;
+									default:
+										$retour = "Echec de Connexion";
+								}
+									echo "</nav>
+											<div class='container h-100'>
+												<div class='row h-100 justify-content-center align-items-center'>
+													<span class='text-white'>".$retour."</span>
+												</div>
+											</div>
+											<meta http-equiv='refresh' content='1;index.php'>";
+									}
+
+							break;
+
+				case 'passwdMissed' :
+					//Formulaire permettant d'avoir l'email et d'envoyer son mot de passe avec contrôle de la présence ou non de cet email
+					if(!isset($_POST['mailDuClient']))
+					{
+						require 'Vues/resetPassword.php';
+					}
+					else {
+						$mail = $_POST['mailDuClient'];
+						$password = $this->maVideotheque->trouvePassword($mail);
+
+						//Si l'email est fausse
+						if ($password == null)
 						{
-							$_SESSION['login'] = $unLogin;
-							require 'Vues/menu.php';
-							echo $this->maVideotheque->listeLesGenres();
+							$message = "Email Invalide";
+						} else {
+
+						//Envoi de l'email
+						if (mail($mail,"Envoi de votre de Mot de Passe","Voici votre mot de passe : ".$password." !", "From: Video&Co"))
+				    	$message = "L'email a été envoyé.";
 						}
-						else
-						{
-							// destroy la session et je repars sur l'acceuil en affichant un texte pour prévenir la personne
-							//des mauvais identifiants;
-							session_destroy();
+
+						//Message accomplissant de l'envoi positivement ou négativement de l'email
 							echo "</nav>
 									<div class='container h-100'>
 										<div class='row h-100 justify-content-center align-items-center'>
-											<span class='text-white'>Identifiants incorrects</span>
+											<span class='text-white'>".$message."</span>
 										</div>
 									</div>
 									<meta http-equiv='refresh' content='1;index.php'>";
-						}
-				break;
-			}
+								}
+					break;
+				}
 		}
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//----------------------------Film--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -19,7 +19,7 @@ function chargerPage()
 		{
 			if((isset($_GET['action'])))
 			{
-				if($_GET['action'] == 'verifLogin')
+				if($_GET['action'] == 'verifLogin' || $_GET['action'] == 'nouveauLogin' || $_GET['action'] =='passwdMissed')
 				{
 					$monControleur->affichePage($_GET['action'],$_GET['vue']);
 				}
@@ -82,7 +82,8 @@ function chargerPage()
                                             <input class='form-group' type='password' placeholder='Mot de passe' name='password'/><br>
                                             <input class='btn btn-secondary mx-auto' type='submit' value='Accéder'/>
                                         </form>
-                                    </td>
+																				<a href='index.php?vue=compte&action=passwdMissed'> Mot de passe oublié </a>
+																		</td>
                                     <td class='justify-content-center td-table'>
                                         <form action = 'index.php?vue=compte&action=nouveauLogin' method='post'>
                                             <input class='form-group' type='text' name='nomClient' placeholder='saisir votre nom'/><br>

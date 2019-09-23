@@ -5,7 +5,7 @@
 			<TD>
 				Modification de mon Profil
 			</TD>
-			<TABLE> <BR>
+			<TABLE>
 		</TR>
 		<TR>
 				<TH> Modifier mon Nom </TH>
@@ -25,16 +25,10 @@
 					<INPUT type ='text' name ='mailClient'/>
 				</TD>
 		</TR>
-      <TR>
-  			<TH> Modifier mon login</TH>
-  				<TD>
-  					<INPUT type ='text' name ='loginClient'/>
-  				</TD>
-  		</TR>
   	<TR>
 			<TH> Modifier mon mot de passe</TH>
 				<TD>
-          <INPUT type ='text' name ='passwdClient'/>
+          <INPUT type ='password' name ='passwdClient'/>
 				</TD>
       </TR>
 			</TABLE>

@@ -164,11 +164,13 @@ Class gestionVideo
 	public function verifLogin($unLogin, $unPassword)
 	{
 		$resultat=$this->tousLesClients->verificationExistanceClient($unLogin, $unPassword);
+		if ($resultat == 1)
+		{
+			if ($this->maBD->verificationActif($unLogin) == 0)
+				$resultat = 2;
+		}
 		return $resultat;
 	}
-
-
-
 
 
 //METHODE INSERANT UN CLIENT----------------------------------------------------------------------------------------------------------
@@ -246,6 +248,33 @@ Class gestionVideo
 		$laSaison = $laSaison->donneObjetSaisonDepuisNumero($unIdSerie,$unNumSaison);
 		$this->tousLesEpisodes->ajouteUnEpisode($sonCode,$unTitreEpisode,$uneDureeEpisode, $laSaison);
 		}
+
+		public function modifClient($nomClient, $prenomClient,$mailClient,$passwdClient)
+			{
+				//On vérifie si le champ saisi est vide et si c'est le cas, on rentre le champ avec les informations initiales
+
+				foreach($this->tousLesClients->getLesClients() as $unClient)
+				{
+					if($unClient->getLoginClient() == $_SESSION['login'])
+						{
+							if (empty($nomClient))
+								$nomClient = $unClient->getNomClient();
+
+							if (empty($prenomClient))
+								$prenomClient = $unClient->getPrenomClient();
+
+							if (empty($mailClient))
+								$mailClient = $unClient->getEmailClient();
+
+							if (empty($passwdClient))
+								$passwdClient = $unClient->getPwdClient();
+
+							$unId = $unClient->getIdClient();
+						}
+				}
+				$this->maBD->updateClient($unId, $nomClient,$prenomClient,$mailClient,$passwdClient);
+			}
+
 	//METHODE RETOURNANT LE NOMBRE DE CLIENT------------------------------------------------------------------------------------------------
 	public function donneNbClients()
 		{
@@ -277,6 +306,20 @@ Class gestionVideo
 		{
 		return $this->tousLesEpisodes->nbEpisodes();
 		}
+
+	 //METHODE RETOURNANT Le password d'un client en fonction du mail envoyé ----------------------------------------------------------------------------------------------------------------------
+	 public function trouvePassword($mail)
+	 {
+		 $retour = $this->tousLesClients->donneObjetClientDepuisMail($mail);
+
+		 if ($retour != null)
+		 {
+			 $retour = $retour->getPwdClient();
+		 }
+
+		 return $retour;
+	 }
+
 	//METHODE RETOURNANT LA LISTE DES differents elements-------------------------------------------------------------------------------------------------------
 	public function listeLesClients()
 		{
