@@ -180,6 +180,8 @@ Class gestionVideo
 		$sonNumero = $this->maBD->insertClient($unNomClient, $unPrenomClient, $unEmailClient, $uneDateAbonnement, $unLogin, $unPassword);
 		//instanciation du client et ajout de celui-ci dans la collection
 		$this->tousLesClients->ajouteUnClient($sonNumero, $unNomClient, $unPrenomClient, $unEmailClient, $uneDateAbonnement, $unLogin, $unPassword);
+
+		return true;
 		}
 	//METHODE INSERANT UN FILM----------------------------------------------------------------------------------------------------------
 	public function ajouteUnFilm($unIdFilm,$unTitreFilm, $unRealisateurFilm, $unIdGenre,$uneDureeFilm)
@@ -321,9 +323,9 @@ Class gestionVideo
 	 }
 
 	//METHODE RETOURNANT LA LISTE DES differents elements-------------------------------------------------------------------------------------------------------
-	public function listeLesClients()
+	public function listeLesClients($login)
 		{
-		return $this->tousLesClients->listeDesClients();
+		return $this->tousLesClients->listeDesClients($login);
 		}
 	public function listeLesFilms()
 		{
@@ -341,9 +343,9 @@ Class gestionVideo
 		{
 		return $this->toutesLesSaisons->listeLesSaisons();
 		}
-	public function listeLesEmprunts()
+	public function listeLesEmprunts($login)
 		{
-		return $this->tousLesEmprunts->listeDesEmprunts();
+		return $this->tousLesEmprunts->listeDesEmprunts($login);
 		}
 	public function listeLesEpisodes()
 		{

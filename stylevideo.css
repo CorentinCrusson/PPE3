@@ -3,6 +3,19 @@
     margin-bottom: 1rem !important;
 }
 
+
+.td-table 
+{
+    color: white !important;
+    text-align: center;
+}
+
+.th-table
+{
+    color: white !important;
+    text-align: center;
+}
+
 body
 {
    margin-top: -24px !important;
@@ -51,9 +64,10 @@ body
     border-top: none !important;
 }
 
-.td-table
+
+.text-white
 {
-    text-align: center;
+  color: white;
 }
 
 .text-red
@@ -64,9 +78,4 @@ body
 .text-small
 {
     font-size: 12px;
-}
-
-th
-{
-  text-color: white;
 }

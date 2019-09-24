@@ -33,11 +33,13 @@ Class conteneurClient
 		}
 
 	//METHODE RETOURNANT LA LISTE DES Clients-----------------------------------------------------------------------------------------
-	public function listeDesClients()
+	public function listeDesClients($unLogin)
 		{
 		$liste = '';
 		foreach ($this->lesClients as $unClient)
-			{	$liste = $liste.'client : "'.$unClient->getNomClient().' - '.$unClient->getPrenomClient().' - '.$unClient->getEmailClient().' - '.$unClient->getDateAbonnementClient().'><br>';
+			{
+				if($unClient->getLoginClient()==$unLogin)
+					$liste = $liste.'client : "'.$unClient->getNomClient().' - '.$unClient->getPrenomClient().' - '.$unClient->getEmailClient().' - '.$unClient->getDateAbonnementClient().'><br>';
 			}
 		return $liste;
 		}

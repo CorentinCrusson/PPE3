@@ -90,7 +90,13 @@ class Controleur
 			//CAS visualisation de mes informations-------------------------------------------------------------------------------------------------
 			case 'visualiser' :
 				//ici il faut pouvoir avoir accès au information de l'internaute connecté
+				$_SESSION['lesClients'] = $this->maVideotheque->listeLesClients($_SESSION['login']);
+
 				require 'Vues/profil.php';
+				break;
+			case 'visuEmprunt' :
+				$_SESSION['lesEmprunts'] = $this->maVideotheque->listeLesEmprunts($_SESSION['login']);
+				require 'Vues/voirEmprunts.php';
 				break;
 
 			//CAS enregistrement d'une modification sur le compte------------------------------------------------------------------------------
@@ -108,7 +114,20 @@ class Controleur
 				$unLogin = $_POST['login'];
 				$unPassword = $_POST['password'];
 
-				$this->maVideotheque->ajouteUnClient($unNom,$unPrenom,$unEmail,$uneDate,$unLogin,$unPassword);
+				if($this->maVideotheque->ajouteUnClient($unNom,$unPrenom,$unEmail,$uneDate,$unLogin,$unPassword))
+				{
+
+					$message = "Bonjour, \n Je vous confirme ".$unNom." ".$unPrenom." que votre compte a bien été créée, sous le login : \n ".$unLogin."\n Cependant, nous attendons
+					chèque à l'adresse : XXX la poste Nantes (44000) \n\n Je vous souhaites une agréable journée. \nCordialement,\nVideo&Co ";
+
+
+					if (mail($unEmail,"Confirmation de l'Inscription à Video&Co",$message, "From: Video&Co")) {
+						$retour = "L'email a été envoyé.";
+					} else {
+						$retour = "L'email n'a pas été envoyé";
+					}
+				}
+				echo $retour."\n";
 				require 'Vues/inscription.php';
 				break;
 
@@ -210,7 +229,7 @@ class Controleur
 						} else {
 
 						//Envoi de l'email
-						if (mail($mail,"Envoi de votre de Mot de Passe","Voici votre mot de passe : ".$password." !", "From: Video&Co"))
+						if (mail($mail,"Envoi de votre de Mot de Passe","Voici votre mot de passe : \n\n".$password, "From: Video&Co"))
 				    	$message = "L'email a été envoyé.";
 						}
 
