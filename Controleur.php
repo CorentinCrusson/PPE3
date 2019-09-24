@@ -118,8 +118,10 @@ class Controleur
 				// ici il faut pouvoir vérifier un login un nouveau utilisateur
 				//Je récupère les login et password saisi et je verifie leur existancerequire
 				//pour cela je verifie dans le conteneurClient via la gestion.
-				$unLogin=$_GET['login'];
-				$unPassword=$_GET['password'];
+				echo 'coucou la famille';
+				$unLogin=$_POST['login'];
+				$unPassword=$_POST['password'];
+				echo 'coucou la famille';
 				$resultat=$this->maVideotheque->verifLogin($unLogin, $unPassword);
 						//si le client existe alors j'affiche le menu et la page visuGenre.php
 						if($resultat==1)

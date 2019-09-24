@@ -6,7 +6,7 @@ function chargerPage()
 {
 	$monControleur = new Controleur();
 	$monControleur->afficheEntete();
-		if(isset($_GET['login']))
+		if(isset($_POST['login']))
 		{
 				if ((isset($_GET['vue']))&& (isset($_GET['action'])))
 				{   $monControleur->affichePage($_GET['action'],$_GET['vue']);
@@ -66,11 +66,10 @@ function chargerPage()
                             <tbody>
                                 <tr>
                                     <td class='td-table justify-content-center'>
-                                        <form action=index.php method=GET>
+                                        <form action='index.php?vue=compte&action=verifLogin' method='post'>
                                             <input class='form-group' type='text' placeholder='Login' name='login'/><br>
                                             <input class='form-group' type='password' placeholder='Mot de passe' name='password'/><br>
-                                            <input type='hidden' name='vue' value='compte'>
-                                            <input type='hidden' name='action' value='verifLogin'/>
+
                                             <input class='btn btn-secondary mx-auto' type='submit' value='Accéder'/>
                                         </form>
                                     </td>
