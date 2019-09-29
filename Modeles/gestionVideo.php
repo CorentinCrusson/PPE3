@@ -96,7 +96,7 @@ Class gestionVideo
 		$nb=0;
 		while ($nb<sizeof($resultat))
 			{
-				$leSupport = $this->tousLesSupports->donneObjetSupportDepuisNumero($resultat[$nb][0]);
+				$leSupport = $this->tousLesSupports->donneObjetSupportDepuisNumero($resultat[$nb][2]);
 				$leGenre = $leSupport->getLeGenreDeSupport();
 				$leGenre = $this->tousLesGenres->donneObjetGenreDepuisNumero($leGenre->getIdGenre());
 				$this->tousLesFilms->ajouteUnFilm($resultat[$nb][0],$leSupport->getTitreSupport(),$leSupport->getRealisateurSupport(),$leSupport->getImageSupport(),$leGenre,$resultat[$nb][1]);
@@ -112,7 +112,7 @@ Class gestionVideo
 		$nb=0;
 		while ($nb<sizeof($resultat))
 			{
-				$leSupport = $this->tousLesSupports->donneObjetSupportDepuisNumero($resultat[$nb][0]);
+				$leSupport = $this->tousLesSupports->donneObjetSupportDepuisNumero($resultat[$nb][2]);
 				$leGenre = $this->tousLesGenres->donneObjetGenreDepuisNumero($leSupport->getLeGenreDeSupport()->getIdGenre());
 				$this->toutesLesSeries->ajouteUneSerie($resultat[$nb][0],$leSupport->getTitreSupport(),$leSupport->getRealisateurSupport(),$leSupport->getImageSupport(),$leGenre,$resultat[$nb][1]);
 			$nb++;
@@ -322,6 +322,11 @@ Class gestionVideo
 		 return $retour;
 	 }
 
+	 public function getLesClients()
+	 {
+		 return $this->tousLesClients;
+	 }
+
 	//METHODE RETOURNANT LA LISTE DES differents elements-------------------------------------------------------------------------------------------------------
 	public function listeLesClients($login)
 		{
@@ -329,11 +334,15 @@ Class gestionVideo
 		}
 	public function listeLesFilms()
 		{
-		return $this->tousLesFilms->listeDesFilms();
+			$retour = $this->maBD->donneImageFilm();
+			$liste = $this->tousLesFilms->listeDesFilms($retour);
+			return $liste;
 		}
 	public function listeLesSeries()
 		{
-		return $this->toutesLesSeries->listeDesSeries();
+			$retour = $this->maBD->donneImageSerie();
+			$liste = $this->toutesLesSeries->listeDesSeries($retour);
+			return $liste;
 		}
 	public function listeLesGenres()
 		{

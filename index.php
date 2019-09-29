@@ -12,7 +12,7 @@ function chargerPage()
 				{
 					$monControleur->affichePage($_GET['action'],$_GET['vue']);
 				} else {
-					premier_affichage();
+					$monControleur->affichePage('visualiser','accueil');
 				}
 		}
 		else

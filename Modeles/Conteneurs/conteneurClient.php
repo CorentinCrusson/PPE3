@@ -109,6 +109,31 @@ Class conteneurClient
 					}
 				return $leBonClient;
 				}
+				public function donneObjetClientDepuisLogin($login)
+					{
+					//initialisation d'un booléen (on part de l'hypothèse que le client n'existe pas)
+					$trouve=false;
+					$leBonClient=null;
+					//création d'un itérateur sur la collection lesClients
+					$iClient = $this->lesClients->getIterator();
+					//TQ on a pas trouvé le client et que l'on est pas arrivé au bout de la collection
+					while ((!$trouve)&&($iClient->valid()))
+						{
+						//SI le numéro du client courant correspond au numéro passé en paramètre
+						if ($iClient->current()->getLoginClient()==$login)
+							{
+							//maj du booléen
+							$trouve=true;
+							//sauvegarde du client courant
+							$leBonClient = $iClient->current();
+
+							}
+						//SINON on passe au client suivant
+						else
+							$iClient->next();
+						}
+					return $leBonClient;
+					}
 	public function verificationExistanceClient($unLogin, $unPassword)
 	{
 		//echo $unLogin."<br/>";

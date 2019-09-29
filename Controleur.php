@@ -1,6 +1,7 @@
 ﻿<?php
 //include du fichier GESTION pour les objets (Modeles)
 include 'Modeles/gestionVideo.php';
+include 'Api/Allocine/api-allocine-helper.php';
 
 //classe CONTROLEUR qui redirige vers les bonnes vues les bonnes informations
 class Controleur
@@ -9,7 +10,6 @@ class Controleur
 	//---------------------------ATTRIBUTS PRIVES-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	private $maVideotheque;
-
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//---------------------------CONSTRUCTEUR------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ class Controleur
 				$this->vueRessource($action);
 				break;
 			case "accueil":
-				session_destroy();
+				$this->vueAccueil($action);
 				break;
 			}
 		}
@@ -98,6 +98,10 @@ class Controleur
 				$_SESSION['lesEmprunts'] = $this->maVideotheque->listeLesEmprunts($_SESSION['login']);
 				require 'Vues/voirEmprunts.php';
 				break;
+			case 'deconnexion':
+				session_destroy();
+				$this->redirection("","Déconnexion Effectuée");
+					break;
 
 			//CAS enregistrement d'une modification sur le compte------------------------------------------------------------------------------
 			case 'modifier' :
@@ -118,7 +122,7 @@ class Controleur
 				{
 
 					$message = "Bonjour, \n Je vous confirme ".$unNom." ".$unPrenom." que votre compte a bien été créée, sous le login : \n ".$unLogin."\n Cependant, nous attendons
-					chèque à l'adresse : XXX la poste Nantes (44000) \n\n Je vous souhaites une agréable journée. \nCordialement,\nVideo&Co ";
+					chèque à l'adresse : XXX la poste Nantes (44000) \n\n Je vous souhaites une agréable journée. \n\nCordialement,\nVideo&Co ";
 
 
 					if (mail($unEmail,"Confirmation de l'Inscription à Video&Co",$message, "From: Video&Co")) {
@@ -146,13 +150,7 @@ class Controleur
 						require 'Vues/erreur.php';
 					}*/
 						$this->maVideotheque->modifClient($unNom, $unPrenom, $unEmail, $unPassword);
-						echo "</nav>
-								<div class='container h-100'>
-									<div class='row h-100 justify-content-center align-items-center'>
-										<span class='text-white'>Modification Effectuée</span>
-									</div>
-								</div>
-								<meta http-equiv='refresh' content='1;index.php?vue=compte&action=verifLogin'>";
+						$this->redirection("?vue=compte&action=verifLogin","Modifications Effectués");
 					break;
 
 			//CAS verifier un utilisateur ------------------------------------------------------------------------------
@@ -178,7 +176,7 @@ class Controleur
 							{
 								if(!isset($_SESSION['login']))
 									$_SESSION['login'] = $unLogin;
-								require 'Vues/menu.php';
+									$this->redirection("?vue=accueil&action=visualiser","Identifiants Corrects");
 								echo $this->maVideotheque->listeLesGenres();
 							}
 							else
@@ -201,13 +199,7 @@ class Controleur
 									default:
 										$retour = "Echec de Connexion";
 								}
-									echo "</nav>
-											<div class='container h-100'>
-												<div class='row h-100 justify-content-center align-items-center'>
-													<span class='text-white'>".$retour."</span>
-												</div>
-											</div>
-											<meta http-equiv='refresh' content='1;index.php'>";
+									$this->redirection("",$retour);
 									}
 
 							break;
@@ -221,6 +213,7 @@ class Controleur
 					else {
 						$mail = $_POST['mailDuClient'];
 						$password = $this->maVideotheque->trouvePassword($mail);
+						$message="";
 
 						//Si l'email est fausse
 						if ($password == null)
@@ -232,36 +225,49 @@ class Controleur
 						if (mail($mail,"Envoi de votre de Mot de Passe","Voici votre mot de passe : \n\n".$password, "From: Video&Co"))
 				    	$message = "L'email a été envoyé.";
 						}
-
 						//Message accomplissant de l'envoi positivement ou négativement de l'email
-							echo "</nav>
-									<div class='container h-100'>
-										<div class='row h-100 justify-content-center align-items-center'>
-											<span class='text-white'>".$message."</span>
-										</div>
-									</div>
-									<meta http-equiv='refresh' content='1;index.php'>";
-								}
+						$this->redirection("",$message);
+					}
 					break;
 				}
 		}
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//----------------------------Film--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 	private function vueFilm($action)
 		{
 		//SELON l'action demandée
 		switch ($action)
 			{
 
-			//CAS visualisation de tous les films-------------------------------------------------------------------------------------------------
-			case "visualiser" :
-				//ici il faut pouvoir visualiser l'ensemble des films
-				require 'Vues/construction.php';
-				break;
+				//CAS visualisation de tous les films-------------------------------------------------------------------------------------------------
+				case "visualiser" :
+				require 'Vues/menu.php';
+					//ici il faut pouvoir visualiser l'ensemble des films
+					$affichage = $this->maVideotheque->listeLesFilms();
+					echo $affichage;
+					break;
 
 			}
 		}
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		//---------------------------- Accueil --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	private function vueAccueil($action)
+	{
+		switch($action) {
+
+			case "visualiser":
+				$_SESSION['nom'] = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getNomClient();
+				$_SESSION['prenom'] = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getPrenomClient();
+				require 'Vues/menu.php';
+				echo $this->maVideotheque->listeLesFilms();
+				break;
+		}
+
+	}
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//----------------------------Serie--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -275,7 +281,9 @@ class Controleur
 			//CAS visualisation de toutes les Series-------------------------------------------------------------------------------------------------
 			case "visualiser" :
 				//ici il faut pouvoir visualiser l'ensemble des Séries
-				require 'Vues/construction.php';
+				require 'Vues/menu.php';
+				$affichage = $this->maVideotheque->listeLesSeries();
+				echo $affichage;
 				break;
 
 			}
@@ -325,6 +333,18 @@ class Controleur
 					}
 				break;
 			}
+		}
+
+		//Methode permettant de rediriger vers une page, en écrivant un message lors de la transition
+		private function redirection($page,$message="")
+		{
+			echo "</nav>
+					<div class='container h-100'>
+						<div class='row h-100 justify-content-center align-items-center'>
+							<span class='text-white'>".$message."</span>
+						</div>
+					</div>
+					<meta http-equiv='refresh' content='1;index.php".$page."'>";
 		}
 
 	}
