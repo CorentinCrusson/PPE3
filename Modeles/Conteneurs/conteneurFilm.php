@@ -35,12 +35,17 @@ Class conteneurFilm
 					$row = $retour->fetch(PDO::FETCH_NUM);
 					$id = $unFilm->getIdFilm();
 
-					$liste = $liste.'<img src=./Images/'.$row[0].' title="'.$unFilm->getTitreFilm().'" />';
+					$liste = $liste.'<img src=./Images/'.$row[0].'
+					 title="'.$unFilm->getTitreFilm().'"/>';
+
+
 					if($id%4==0)
 					{
-						$liste = $liste.'<p> AAAAHHH </p> <BR>';
+						$liste = $liste.'<BR>';
 					}
+
 				}
+				$liste = $liste.'';
 			return $liste;
 		}
 

@@ -35,14 +35,17 @@ Class conteneurSerie
 				$row = $retour->fetch(PDO::FETCH_NUM);
 				$id = $uneSerie->getIdSerie();
 
-				$liste = $liste.'<img src=./Images/'.$row[0].' title="'.$uneSerie->getTitreSerie().'" />';
+				$liste = $liste.'<img src=./Images/'.$row[0].'
+				 title="'.$uneSerie->getTitreSerie().'"/> ';
+
 
 				if($id%4==0)
 				{
-					$liste = $liste.'<p> AAAAHHH </p> <BR><BR>';
+					$liste = $liste.'<BR>';
 				}
 
 			}
+			$liste = $liste.'';
 		return $liste;
 		}
 
