@@ -5,37 +5,45 @@ Class conteneurClient
 	{
 	//ATTRIBUTS PRIVES-------------------------------------------------------------------------
 	private $lesClients;
-	
+
 	//CONSTRUCTEUR-----------------------------------------------------------------------------
 	public function __construct()
 		{
 		$this->lesClients = new arrayObject();
 		}
-	
+
 	//METHODE AJOUTANT UN Client------------------------------------------------------------------------------
 	public function ajouteUnClient($unIdClient, $unNomClient, $unPrenomClient, $unEmailClient, $uneDateAbonnement, $unLoginClient, $unPwdClient)
 		{
 		$unClient = new client($unIdClient, $unNomClient, $unPrenomClient, $unEmailClient, $uneDateAbonnement,$unLoginClient, $unPwdClient);
 		$this->lesClients->append($unClient);
-			
+
 		}
-		
+	public function getLesClients()
+	{
+		return $this->lesClients;
+	}
+
+
+
 	//METHODE RETOURNANT LE NOMBRE De clients-------------------------------------------------------------------------------
 	public function nbClient()
 		{
 		return $this->lesClients->count();
-		}	
-		
+		}
+
 	//METHODE RETOURNANT LA LISTE DES Clients-----------------------------------------------------------------------------------------
-	public function listeDesClients()
+	public function listeDesClients($unLogin)
 		{
 		$liste = '';
 		foreach ($this->lesClients as $unClient)
-			{	$liste = $liste.'client : "'.$unClient->getNomClient().' - '.$unClient->getPrenomClient().' - '.$unClient->getEmailClient().' - '.$unClient->getDateAbonnementClient().'><br>';
+			{
+				if($unClient->getLoginClient()==$unLogin)
+					$liste = $liste.'client : "'.$unClient->getNomClient().' - '.$unClient->getPrenomClient().' - '.$unClient->getEmailClient().' - '.$unClient->getDateAbonnementClient().'><br>';
 			}
 		return $liste;
 		}
-		
+
 		//METHODE RETOURNANT LA LISTE DES CLIENTS DANS UNE BALISE <SELECT>------------------------------------------------------------------
 	public function lesClientsAuFormatHTML()
 		{
@@ -46,9 +54,9 @@ Class conteneurClient
 			}
 		$liste = $liste."</SELECT>";
 		return $liste;
-		}		
+		}
 
-//METHODE RETOURNANT UN CLIENT A PARTIR DE SON NUMERO--------------------------------------------	
+//METHODE RETOURNANT UN CLIENT A PARTIR DE SON NUMERO--------------------------------------------
 	public function donneObjetClientDepuisNumero($unIdClient)
 		{
 		//initialisation d'un booléen (on part de l'hypothèse que le client n'existe pas)
@@ -66,14 +74,66 @@ Class conteneurClient
 				$trouve=true;
 				//sauvegarde du client courant
 				$leBonClient = $iClient->current();
-				
+
 				}
 			//SINON on passe au client suivant
 			else
 				$iClient->next();
 			}
 		return $leBonClient;
-		}		
+		}
+
+		//METHODE RETOURNANT UN CLIENT A PARTIR DE SON NUMERO--------------------------------------------
+			public function donneObjetClientDepuisMail($mail)
+				{
+				//initialisation d'un booléen (on part de l'hypothèse que le client n'existe pas)
+				$trouve=false;
+				$leBonClient=null;
+				//création d'un itérateur sur la collection lesClients
+				$iClient = $this->lesClients->getIterator();
+				//TQ on a pas trouvé le client et que l'on est pas arrivé au bout de la collection
+				while ((!$trouve)&&($iClient->valid()))
+					{
+					//SI le numéro du client courant correspond au numéro passé en paramètre
+					if ($iClient->current()->getEmailClient()==$mail)
+						{
+						//maj du booléen
+						$trouve=true;
+						//sauvegarde du client courant
+						$leBonClient = $iClient->current();
+
+						}
+					//SINON on passe au client suivant
+					else
+						$iClient->next();
+					}
+				return $leBonClient;
+				}
+				public function donneObjetClientDepuisLogin($login)
+					{
+					//initialisation d'un booléen (on part de l'hypothèse que le client n'existe pas)
+					$trouve=false;
+					$leBonClient=null;
+					//création d'un itérateur sur la collection lesClients
+					$iClient = $this->lesClients->getIterator();
+					//TQ on a pas trouvé le client et que l'on est pas arrivé au bout de la collection
+					while ((!$trouve)&&($iClient->valid()))
+						{
+						//SI le numéro du client courant correspond au numéro passé en paramètre
+						if ($iClient->current()->getLoginClient()==$login)
+							{
+							//maj du booléen
+							$trouve=true;
+							//sauvegarde du client courant
+							$leBonClient = $iClient->current();
+
+							}
+						//SINON on passe au client suivant
+						else
+							$iClient->next();
+						}
+					return $leBonClient;
+					}
 	public function verificationExistanceClient($unLogin, $unPassword)
 	{
 		//echo $unLogin."<br/>";
@@ -108,5 +168,5 @@ Class conteneurClient
 		return $trouve;
 	}
 	}
-	
-?> 
+
+?>

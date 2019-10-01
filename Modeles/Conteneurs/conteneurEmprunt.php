@@ -5,39 +5,41 @@ Class conteneurEmprunt
 	{
 	//ATTRIBUTS PRIVES-------------------------------------------------------------------------
 	private $lesEmprunt;
-	
+
 	//CONSTRUCTEUR-----------------------------------------------------------------------------
 	public function __construct()
 		{
 		$this->lesEmprunts = new arrayObject();
 		}
-	
+
 	//METHODE AJOUTANT UN Emprunt------------------------------------------------------------------------------
 	public function mettreUnEmpruntEnPlus($unIdEmprunt, $uneDateEmprunt,$unClient,$unSupport)
-		{           
+		{
 		$unEmprunt= new emprunt($unIdEmprunt, $uneDateEmprunt,$unClient,$unSupport);
 		$this->lesEmprunts->append($unEmprunt);
-			
+
 		}
-		
+
 	//METHODE RETOURNANT LE NOMBRE d'emprunt-------------------------------------------------------------------------------
 	public function nbEmprunt()
 		{
 		return $this->lesEmprunts->count();
-		}	
-		
+		}
+
 	//METHODE RETOURNANT LA LISTE DES Emprunts -----------------------------------------------------------------------------------------
-	public function listeDesEmprunts()
+	public function listeDesEmprunts($unLogin)
 		{
 		$liste = '';
 		foreach ($this->lesEmprunts as $unEmprunt)
 			{	$unSupport=$unEmprunt->getLeSupport();
 				$leClient=$unEmprunt->getLeClient();
-			    $liste = $liste.'Emprunt N° : "'.$unEmprunt->getIdEmprunt().' -> Support : '.$unSupport->getIdSupport().' - '.$unSupport->getTitreSupport().' -> Client : '.$leClient->getNomClient().' ->Date Emprunt : '.$unEmprunt->getDateEmprunt().'><br>';
+				if ($leClient->getLoginClient()==$unLogin) {
+			    $liste = $liste.'Emprunt N° : "'.$unEmprunt->getIdEmprunt().' -> Support : '.$unSupport->getIdSupport().' - '.$unSupport->getTitreSupport().' ->Date Emprunt : '.$unEmprunt->getDateEmprunt().'<br>';
+				}
 			}
 		return $liste;
 		}
-		
+
 		//METHODE RETOURNANT LA LISTE DES emprunts DANS UNE BALISE <SELECT>------------------------------------------------------------------
 	public function lesEmpruntsAuFormatHTML()
 		{
@@ -48,9 +50,9 @@ Class conteneurEmprunt
 			}
 		$liste = $liste."</SELECT>";
 		return $liste;
-		}		
+		}
 
-//METHODE RETOURNANT UN emprunt A PARTIR DE SON NUMERO--------------------------------------------	
+//METHODE RETOURNANT UN emprunt A PARTIR DE SON NUMERO--------------------------------------------
 	public function donneObjetEmpruntDepuisNumero($unIdEmprunt)
 		{
 		//initialisation d'un booléen (on part de l'hypothèse que l'emprunt n'existe pas)
@@ -68,15 +70,15 @@ Class conteneurEmprunt
 				$trouve=true;
 				//sauvegarde l'emprunt courant
 				$leBonEmprunt = $iEmprunt->current();
-				
+
 				}
 			//SINON on passe à l'emprunt suivant
 			else
 				$iEmprunt->next();
 			}
 		return $leBonEmprunt;
-		}		
-	
+		}
+
 	}
-	
-?> 
+
+?>

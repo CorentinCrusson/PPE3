@@ -3,12 +3,25 @@
     margin-bottom: 1rem !important;
 }
 
+
+.td-table 
+{
+    color: white !important;
+    text-align: center;
+}
+
+.th-table
+{
+    color: white !important;
+    text-align: center;
+}
+
 body
 {
    margin-top: -24px !important;
    background-color: #000000 !important;
 }
- 
+
 .avatar
 {
     width: 30px;
@@ -18,14 +31,14 @@ body
     margin-left: -5px;
     border-radius: 50%;
 }
- 
+
 .btn-avatar
 {
     background-color: transparent !important;
     border: none !important;
     padding: 0 !important;
 }
-  
+
 .pos-avatar
 {
     width: 50px;
@@ -51,9 +64,10 @@ body
     border-top: none !important;
 }
 
-.td-table
+
+.text-white
 {
-    text-align: center;
+  color: white;
 }
 
 .text-red
