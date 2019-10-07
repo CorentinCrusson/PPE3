@@ -10,6 +10,7 @@ class Controleur
 	//---------------------------ATTRIBUTS PRIVES-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	private $maVideotheque;
+	private $helper;
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//---------------------------CONSTRUCTEUR------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -17,6 +18,7 @@ class Controleur
 	public function __construct()
 		{
 		$this->maVideotheque = new gestionVideo();
+		$this->helper = new AlloHelper();
 		}
 
 
@@ -94,14 +96,21 @@ class Controleur
 
 				require 'Vues/profil.php';
 				break;
-			case 'visuEmprunt' :
-				$_SESSION['lesEmprunts'] = $this->maVideotheque->listeLesEmprunts($_SESSION['login']);
-				require 'Vues/voirEmprunts.php';
+			case 'visuEmprunt':
+				require 'Vues/menu.php';
+				$affichage = $this->maVideotheque->listeLesEmprunts($_SESSION['login']);
+				echo $affichage;
 				break;
 			case 'deconnexion':
 				session_destroy();
 				$this->redirection("","Déconnexion Effectuée");
 					break;
+
+			case 'search':
+				require 'Vues/menu.php';
+				$affichage = $this->maVideotheque->recherche($_SESSION['search']);
+				echo $affichage;
+				break;
 
 			//CAS enregistrement d'une modification sur le compte------------------------------------------------------------------------------
 			case 'modifier' :
@@ -263,7 +272,28 @@ class Controleur
 				$_SESSION['nom'] = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getNomClient();
 				$_SESSION['prenom'] = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getPrenomClient();
 				require 'Vues/menu.php';
-				echo $this->maVideotheque->listeLesFilms();
+
+				//TEST API1234
+				$code = 27061;
+		 		$profile = 'small';
+				try
+		    {
+		        // Envoi de la requête
+		        $movie = $this->helper->movie($code, $profile );
+
+		        // Afficher le titre
+		        echo "Titre du film: ", $movie->title, PHP_EOL;
+
+		        // Afficher toutes les données
+		        print_r($movie->getArray());
+
+		    }
+		    catch( ErrorException $error )
+		    {
+		        // En cas d'erreur
+		        echo "Erreur n°", $error->getCode(), ": ", $error->getMessage(), PHP_EOL;
+		    }
+				//echo $this->maVideotheque->listeLesFilms();
 				break;
 		}
 

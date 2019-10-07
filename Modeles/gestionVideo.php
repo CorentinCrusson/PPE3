@@ -155,7 +155,7 @@ Class gestionVideo
 				// récupérer le client et le support à partir de l'emprunt
 				$leSupport = $this->tousLesSupports->donneObjetSupportDepuisNumero($resultat[$nb][3]);
 				$unClient = $this->tousLesClients->donneObjetClientDepuisNumero($resultat[$nb][2]);
-				$this->tousLesEmprunts->mettreUnEmpruntEnPlus($resultat[$nb][0], $resultat[$nb][1],$unClient,$leSupport);
+				$this->tousLesEmprunts->mettreUnEmpruntEnPlus($resultat[$nb][0], $resultat[$nb][1],$unClient,$leSupport,$resultat[$nb][4]);
 			    $nb++;
 			}
 
@@ -354,7 +354,9 @@ Class gestionVideo
 		}
 	public function listeLesEmprunts($login)
 		{
-		return $this->tousLesEmprunts->listeDesEmprunts($login);
+			$retour = $this->maBD->donneImagesEmprunts($login);
+		 	$liste = $this->tousLesEmprunts->listeDesEmprunts($login,$retour);
+			echo $liste;
 		}
 	public function listeLesEpisodes()
 		{

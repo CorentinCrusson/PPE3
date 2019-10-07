@@ -79,3 +79,9 @@ body
 {
     font-size: 12px;
 }
+
+.md-form
+{
+  position: absolute;
+  padding: 20%;
+}

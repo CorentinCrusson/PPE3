@@ -18,6 +18,10 @@
             </li>
         </ul>
 
+        <div class="md-form mt-0">
+          <input class="form-control" type="text" placeholder="Search" aria-label="Search">          
+        </div>
+
         <ul class="nav navbar-nav ml-auto pos-avatar justify-content-end">
 
             <li class="nav-item active">
