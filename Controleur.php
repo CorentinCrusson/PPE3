@@ -75,6 +75,9 @@ class Controleur
 			case "accueil":
 				$this->vueAccueil($action);
 				break;
+			/*case "search":
+				$this->vueSearch($action);
+				break;*/
 			}
 		}
 
@@ -282,10 +285,10 @@ class Controleur
 		        $movie = $this->helper->movie($code, $profile );
 
 		        // Afficher le titre
-		        echo "Titre du film: ", $movie->title, PHP_EOL;
+		        //echo "Titre du film: ", $movie->title, PHP_EOL;
 
 		        // Afficher toutes les données
-		        print_r($movie->getArray());
+		        //print_r($movie->getArray());
 
 		    }
 		    catch( ErrorException $error )
@@ -365,6 +368,15 @@ class Controleur
 			}
 		}
 
+		/*private function vueSearch($action)
+		{
+			switch($action) {
+				case "accueil":
+				echo $_POST['research'];
+					break;
+			}
+		}*/
+
 		//Methode permettant de rediriger vers une page, en écrivant un message lors de la transition
 		private function redirection($page,$message="")
 		{
@@ -376,6 +388,15 @@ class Controleur
 					</div>
 					<meta http-equiv='refresh' content='1;index.php".$page."'>";
 		}
+
+		/*METHODE POUR AFFICHER le résultat de la recherche
+		public function afficherResultatRecherche($video)
+		{
+			if(isset($_GET['video'])){
+		    $video = (String) trim($_GET['video']);
+			}
+			$this->maVideotheque->recupererFilmsSeries($video);
+		}*/
 
 	}
 ?>

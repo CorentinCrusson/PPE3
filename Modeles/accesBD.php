@@ -372,6 +372,29 @@ class accesBD
 			return $requete;
 		}
 
+		//PROCEDURE pour recuperer les informations de la vidéo mis en barre de recherche
+		public function recupererInfos($video)
+		{
+			$video = json_decode($video['params']);
+			echo "coucou";
+				$requete = $this->conn->prepare("SELECT *
+				FROM support
+				WHERE titreSupport LIKE ?
+				LIMIT 10;");
+				$requete->bindValue(1,array("$video%"));
+				$requete->execute();
+
+			$requete = $requete->fetchAll();
+
+			foreach($requete as $r){
+				?> <script> alert(<?php echo $r['idSupport']; ?>) </script>
+        <div style="margin-top: 20px 0; color: white; border-bottom: 2px solid #ccc"><?= $r['idSupport'] . " " . $r['titreSupport'] ?></div><?php
+    	}
+
+
+
+		}
+
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-----------------------------DONNE LE PROCHAIN INDENTIFIANT---------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

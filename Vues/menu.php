@@ -18,11 +18,14 @@
             </li>
         </ul>
 
-        <div class="md-form mt-0">
-          <input class="form-control" type="text" placeholder="Search" aria-label="Search">          
+         ﻿<div class="form-group">
+          <input class="form-control" id="search-video" type="text" placeholder="Search" aria-label="Search">
+        </div>
+        <div style="margin-top: 20px">
+          <div id="result-search"></div> <!-- C'est ici que nous aurons nos résultats de notre recherche -->
         </div>
 
-        <ul class="nav navbar-nav ml-auto pos-avatar justify-content-end">
+        <ul class="nav navbar-nav ml-auto pos-a'vatar justify-content-end">
 
             <li class="nav-item active">
                 <ul class="dropdown">
