@@ -368,14 +368,13 @@ class Controleur
 			}
 		}
 
-		/*private function vueSearch($action)
+		private function vueSearch($action)
 		{
 			switch($action) {
 				case "accueil":
-				echo $_POST['research'];
 					break;
 			}
-		}*/
+		}
 
 		//Methode permettant de rediriger vers une page, en écrivant un message lors de la transition
 		private function redirection($page,$message="")

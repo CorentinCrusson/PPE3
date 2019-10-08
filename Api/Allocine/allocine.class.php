@@ -2,7 +2,7 @@
 
 class Allocine
 {
-    private $_api_url = 'http://api.allocine.fr/rest/v3';
+    private $_api_url = 'https://api.allocine.fr/rest/v3';
     private $_partner_key;
     private $_secret_key;
 
@@ -10,6 +10,8 @@ class Allocine
     {
         $this->_partner_key = $partner_key;
         $this->_secret_key = $secret_key;
+        //$this->_partner_key= '100043982026';
+        //$this->_secret_key = '29d185d98c984a359e6e6f26a0474269';
     }
 
     private function _do_request($method, $params)
