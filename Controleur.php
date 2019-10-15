@@ -10,6 +10,7 @@ class Controleur
 	//---------------------------ATTRIBUTS PRIVES-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	private $maVideotheque;
+	private $helper;
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//---------------------------CONSTRUCTEUR------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -17,6 +18,7 @@ class Controleur
 	public function __construct()
 		{
 		$this->maVideotheque = new gestionVideo();
+		$this->helper = new AlloHelper();
 		}
 
 
@@ -49,6 +51,11 @@ class Controleur
 		require 'Vues/menu.php';
 		}
 
+	public function afficheBarreRecherche()
+	{
+		require 'Vues/searchBar.php';
+	}
+
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//--------------------------METHODE D'AFFICHAGE DES VUES----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -62,9 +69,11 @@ class Controleur
 				$this->vueCompte($action);
 				break;
 			case 'film':
+				require 'Vues/menu.php';
 				$this->vueFilm($action);
 				break;
 			case 'serie':
+				require 'Vues/menu.php';
 				$this->vueSerie($action);
 				break;
 			case 'Videotheque':
@@ -73,6 +82,9 @@ class Controleur
 			case "accueil":
 				$this->vueAccueil($action);
 				break;
+			/*case "search":
+				$this->vueSearch($action);
+				break;*/
 			}
 		}
 
@@ -94,14 +106,21 @@ class Controleur
 
 				require 'Vues/profil.php';
 				break;
-			case 'visuEmprunt' :
-				$_SESSION['lesEmprunts'] = $this->maVideotheque->listeLesEmprunts($_SESSION['login']);
-				require 'Vues/voirEmprunts.php';
+			case 'visuEmprunt':
+				require 'Vues/menu.php';
+				$affichage = $this->maVideotheque->listeLesEmprunts($_SESSION['login']);
+				echo $affichage;
 				break;
 			case 'deconnexion':
 				session_destroy();
 				$this->redirection("","Déconnexion Effectuée");
 					break;
+
+			case 'search':
+				require 'Vues/menu.php';
+				$affichage = $this->maVideotheque->recherche($_SESSION['search']);
+				echo $affichage;
+				break;
 
 			//CAS enregistrement d'une modification sur le compte------------------------------------------------------------------------------
 			case 'modifier' :
@@ -231,26 +250,7 @@ class Controleur
 					break;
 				}
 		}
-	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	//----------------------------Film--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	private function vueFilm($action)
-		{
-		//SELON l'action demandée
-		switch ($action)
-			{
-
-				//CAS visualisation de tous les films-------------------------------------------------------------------------------------------------
-				case "visualiser" :
-				require 'Vues/menu.php';
-					//ici il faut pouvoir visualiser l'ensemble des films
-					$affichage = $this->maVideotheque->listeLesFilms();
-					echo $affichage;
-					break;
-
-			}
-		}
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 		//---------------------------- Accueil --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -263,11 +263,57 @@ class Controleur
 				$_SESSION['nom'] = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getNomClient();
 				$_SESSION['prenom'] = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getPrenomClient();
 				require 'Vues/menu.php';
-				echo $this->maVideotheque->listeLesFilms();
+
+				//TEST API1234
+				$code = 27061;
+		 		$profile = 'small';
+				try
+		    {
+		        /* -*9Envoi de la requête
+		        $movie = $this->helper->movie($code, $profile );
+
+		        // Afficher le titre
+		        echo "Titre du film: ", $movie->title, PHP_EOL;
+
+		        // Afficher toutes les données
+		        print_r($movie->getArray());*/
+
+		    }
+		    catch( ErrorException $error )
+		    {
+		        // En cas d'erreur
+		        echo "Erreur n°", $error->getCode(), ": ", $error->getMessage(), PHP_EOL;
+		    }
+				//echo $this->maVideotheque->listeLesFilms();
 				break;
 		}
 
 	}
+
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	//----------------------------Film--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	private function vueFilm($action)
+		{
+		//SELON l'action demandée
+		switch ($action)
+			{
+
+				//CAS visualisation de tous les films-------------------------------------------------------------------------------------------------
+				case "visualiser" :
+					//ici il faut pouvoir visualiser l'ensemble des films
+					$affichage = $this->maVideotheque->listeLesFilms();
+					echo $affichage;
+					break;
+
+				case "fiche":
+					$affichage = $this->maVideotheque->listeLesFilms();
+					echo $affichage;
+					break;
+
+			}
+		}
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//----------------------------Serie--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -281,10 +327,14 @@ class Controleur
 			//CAS visualisation de toutes les Series-------------------------------------------------------------------------------------------------
 			case "visualiser" :
 				//ici il faut pouvoir visualiser l'ensemble des Séries
-				require 'Vues/menu.php';
 				$affichage = $this->maVideotheque->listeLesSeries();
 				echo $affichage;
 				break;
+
+			case "fiche":
+					$affichage = $this->maVideotheque->listeLesFilms();
+					echo $affichage;
+					break;
 
 			}
 		}
@@ -335,6 +385,14 @@ class Controleur
 			}
 		}
 
+		private function vueSearch($action)
+		{
+			switch($action) {
+				case "accueil":
+					break;
+			}
+		}
+
 		//Methode permettant de rediriger vers une page, en écrivant un message lors de la transition
 		private function redirection($page,$message="")
 		{
@@ -346,6 +404,15 @@ class Controleur
 					</div>
 					<meta http-equiv='refresh' content='1;index.php".$page."'>";
 		}
+
+		/*METHODE POUR AFFICHER le résultat de la recherche
+		public function afficherResultatRecherche($video)
+		{
+			if(isset($_GET['video'])){
+		    $video = (String) trim($_GET['video']);
+			}
+			$this->maVideotheque->recupererFilmsSeries($video);
+		}*/
 
 	}
 ?>

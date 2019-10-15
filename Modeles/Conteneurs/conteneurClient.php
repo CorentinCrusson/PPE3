@@ -38,8 +38,10 @@ Class conteneurClient
 		$liste = '';
 		foreach ($this->lesClients as $unClient)
 			{
-				if($unClient->getLoginClient()==$unLogin)
-					$liste = $liste.'client : "'.$unClient->getNomClient().' - '.$unClient->getPrenomClient().' - '.$unClient->getEmailClient().' - '.$unClient->getDateAbonnementClient().'><br>';
+				if($unClient->getLoginClient())
+				{
+					$liste = $liste.'<img src="deded" > </img> <h2> '.$unClient->getNomClient().' '.$unClient->getPrenomClient().' </h2>';
+				}
 			}
 		return $liste;
 		}

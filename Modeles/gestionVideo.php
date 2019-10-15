@@ -1,13 +1,13 @@
-﻿<?php
-include 'Conteneurs/conteneurClient.php';
-include 'Conteneurs/conteneurEmprunt.php';
-include 'Conteneurs/conteneurEpisode.php';
-include 'Conteneurs/conteneurFilm.php';
-include 'Conteneurs/conteneurGenre.php';
-include 'Conteneurs/conteneurSaison.php';
-include 'Conteneurs/conteneurSerie.php';
-include 'Conteneurs/conteneurSupport.php';
-include 'accesBD.php';
+<?php
+include_once './Modeles/Conteneurs/conteneurClient.php';
+include_once './Modeles/Conteneurs/conteneurEmprunt.php';
+include_once './Modeles/Conteneurs/conteneurEpisode.php';
+include_once './Modeles/Conteneurs/conteneurFilm.php';
+include_once './Modeles/Conteneurs/conteneurGenre.php';
+include_once './Modeles/Conteneurs/conteneurSaison.php';
+include_once './Modeles/Conteneurs/conteneurSerie.php';
+include_once './Modeles/Conteneurs/conteneurSupport.php';
+include_once './Modeles/accesBD.php';
 
 Class gestionVideo
 	{
@@ -155,11 +155,23 @@ Class gestionVideo
 				// récupérer le client et le support à partir de l'emprunt
 				$leSupport = $this->tousLesSupports->donneObjetSupportDepuisNumero($resultat[$nb][3]);
 				$unClient = $this->tousLesClients->donneObjetClientDepuisNumero($resultat[$nb][2]);
-				$this->tousLesEmprunts->mettreUnEmpruntEnPlus($resultat[$nb][0], $resultat[$nb][1],$unClient,$leSupport);
+				$this->tousLesEmprunts->mettreUnEmpruntEnPlus($resultat[$nb][0], $resultat[$nb][1],$unClient,$leSupport,$resultat[$nb][4]);
 			    $nb++;
 			}
 
 		}
+
+/*METHODE AFFICHANT FILM/SERIES
+		public function recupererFilmsSeries($video)
+		{
+			$requete = $this->maBD->recupererInfos($video);
+			foreach($requete as $r){
+      ?>
+        <div style="margin-top: 20px 0; border-bottom: 2px solid #ccc"><?= $r['idSupport'] . " " . $r['titreSupport'] ?></div><?php
+    	}
+			return $requete;
+		}*/
+
 //METHODE QUI VERIF LE LOGIN ET LE PASSWORD DE L UTILISATEUR
 	public function verifLogin($unLogin, $unPassword)
 	{
@@ -354,7 +366,9 @@ Class gestionVideo
 		}
 	public function listeLesEmprunts($login)
 		{
-		return $this->tousLesEmprunts->listeDesEmprunts($login);
+			$retour = $this->maBD->donneImagesEmprunts($login);
+		 	$liste = $this->tousLesEmprunts->listeDesEmprunts($login,$retour);
+			echo $liste;
 		}
 	public function listeLesEpisodes()
 		{

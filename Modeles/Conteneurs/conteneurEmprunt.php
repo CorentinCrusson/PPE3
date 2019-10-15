@@ -13,9 +13,10 @@ Class conteneurEmprunt
 		}
 
 	//METHODE AJOUTANT UN Emprunt------------------------------------------------------------------------------
-	public function mettreUnEmpruntEnPlus($unIdEmprunt, $uneDateEmprunt,$unClient,$unSupport)
+	public function mettreUnEmpruntEnPlus($unIdEmprunt, $uneDateEmprunt,$unClient,$unSupport, $uneDateFinEmprunt)
 		{
-		$unEmprunt= new emprunt($unIdEmprunt, $uneDateEmprunt,$unClient,$unSupport);
+
+		$unEmprunt = new emprunt($unIdEmprunt, $uneDateEmprunt,$unClient,$unSupport,$uneDateFinEmprunt);
 		$this->lesEmprunts->append($unEmprunt);
 
 		}
@@ -27,15 +28,29 @@ Class conteneurEmprunt
 		}
 
 	//METHODE RETOURNANT LA LISTE DES Emprunts -----------------------------------------------------------------------------------------
-	public function listeDesEmprunts($unLogin)
+	public function listeDesEmprunts($unLogin,$retour)
 		{
 		$liste = '';
-		foreach ($this->lesEmprunts as $unEmprunt)
-			{	$unSupport=$unEmprunt->getLeSupport();
+		$i=0;
+		$dateEmprunts = array();
+	/*	$this->listeEmprunt = new arrayObject();
+
+		//On cherche d'abord les bons emprunts
+		foreach ($this->lesEmprunts as $unEmprunt) {
+			if($unEmprunt->getLeClient()->getLoginClient()==$unLogin)
+			{
+				$listeEmprunt->append($unEmprunt);
+			}
+		}*/
+		foreach($this->lesEmprunts as $unEmprunt) {
+				$unSupport=$unEmprunt->getLeSupport();
 				$leClient=$unEmprunt->getLeClient();
-				if ($leClient->getLoginClient()==$unLogin) {
-			    $liste = $liste.'Emprunt N° : "'.$unEmprunt->getIdEmprunt().' -> Support : '.$unSupport->getIdSupport().' - '.$unSupport->getTitreSupport().' ->Date Emprunt : '.$unEmprunt->getDateEmprunt().'<br>';
-				}
+
+				if ($leClient->getLoginClient()==$unLogin && $unEmprunt->getDateFinEmprunt() > date("Y-m-d") ) {
+						$row = $retour->fetch(PDO::FETCH_NUM);
+
+		  			$liste = $liste.'<img src=./Images/'.$row[0].' title="ah"/>';
+					}
 			}
 		return $liste;
 		}

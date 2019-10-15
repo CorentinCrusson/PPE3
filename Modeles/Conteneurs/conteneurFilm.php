@@ -29,23 +29,25 @@ Class conteneurFilm
 	//METHODE RETOURNANT LA LISTE DES  films-----------------------------------------------------------------------------------------
 	public function listeDesFilms($retour)
 		{
-			$liste = '';
+			$liste = '<div class="slide blur colonne">';
+			$nb=0;
 			foreach ($this->lesFilms as $unFilm)
 				{
-					$row = $retour->fetch(PDO::FETCH_NUM);
-					$id = $unFilm->getIdFilm();
+					$row = $retour->fetch(PDO::FETCH_OBJ);
+					$id = $row->idSupport;
 
-					$liste = $liste.'<img src=./Images/'.$row[0].'
-					 title="'.$unFilm->getTitreFilm().'"/>';
+					$liste = $liste.'<div> <div> <a href="index.php?vue=film&action=fiche"> <img id='.$id.' src=./Images/'.$row->image.'
+					 title="'.$unFilm->getTitreFilm().'" /> </a> </div> </div>';
+					 $nb++;
 
 
-					if($id%4==0)
+					if($nb%3==0)
 					{
-						$liste = $liste.'<BR>';
+						$liste = $liste.'</div> <div class="slide blur colonne">';
 					}
 
 				}
-				$liste = $liste.'';
+				$liste = $liste.'</div>';
 			return $liste;
 		}
 

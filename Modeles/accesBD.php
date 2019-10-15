@@ -267,6 +267,10 @@ class accesBD
 		return $sonId;
 		}
 
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		//--------------------------- Vérification Activité Compte ------------------------------------------------------------------------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 		//Verification Compte actif
 		public function verificationActif($unLogin)
 		{
@@ -289,6 +293,11 @@ class accesBD
 				die("Erreur dans modifClient : ".$requete->errorCode());
 			}
 		}
+
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			//--------------------- MOFICATION RESUME FILMS / SERIES GRÂCE à L'API ------------------------------------------------------------------------------------------------------------------------------------------------
+			//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-----------------------------EXECUTION D'UNE REQUETE---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -329,11 +338,16 @@ class accesBD
 			return $stringQuery.";";
 		}
 
-		//Donne Image Films
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		//-----------------------------DONNE IMAGES ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+		//Donne Image Séries
 		public function donneImageSerie()
 		{
 			$liste = '';
-			$requete = $this->conn->prepare("SELECT s.image FROM SUPPORT s, SERIE se WHERE se.idSupport = s.idSupport GROUP BY se.idSerie");
+			$requete = $this->conn->prepare("SELECT image,s.idSupport FROM SUPPORT s, SERIE se WHERE se.idSupport = s.idSupport GROUP BY se.idSerie");
 			$requete->execute();
 			return $requete;
 		}
@@ -341,9 +355,36 @@ class accesBD
 		public function donneImageFilm()
 		{
 			$liste = '';
-			$requete = $this->conn->prepare("SELECT s.image FROM SUPPORT s, FILM f WHERE f.idSupport = s.idSupport GROUP BY f.idFilm");
+			$requete = $this->conn->prepare("SELECT image,s.idSupport FROM SUPPORT s, FILM f WHERE f.idSupport = s.idSupport GROUP BY f.idFilm");
 			$requete->execute();
 			return $requete;
+		}
+
+		public function donneImagesEmprunts($loginClient)
+		{
+			$today = date("Y-m-d");
+			$requete = $this->conn->prepare("SELECT DISTINCT s.image FROM SUPPORT s, CLIENT c, EMPRUNT e WHERE c.idClient = e.idClient AND s.idSupport = e.idSupport AND c.login = (?) AND e.dateFinEmprunt >= (?)");
+
+			$requete->bindValue(1,$loginClient);
+			$requete->bindValue(2,$today);
+			$requete->execute();
+
+			return $requete;
+		}
+
+		//PROCEDURE pour recuperer les informations de la vidéo mis en barre de recherche
+		public function retournerInfos($video)
+		{
+				$requete = $this->conn->prepare("SELECT titreSupport,image
+				FROM support
+				WHERE titreSupport LIKE ?
+				LIMIT 10;");
+				$requete->bindValue(1,$video.'%');
+				$requete->execute();
+				$requete = $requete->fetchAll();
+
+				return $requete;
+
 		}
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

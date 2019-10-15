@@ -5,15 +5,23 @@
 		</title>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 		<link rel="stylesheet" href="./css/stylevideo.css" type="text/css"/>
-		<link href="./css/carousel.scss" rel="stylesheet/scss" type="text/css">
+		<link rel="stylesheet" href="./css/carousel.css" type="text/css"/>
+		<link rel="stylesheet" href="./css/bootstrap.min.css" type="text/css"/>
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap-grid.css" rel="stylesheet" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <!--  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-	<head>
+					<script src="./jquery/hover.js"></script>
+					<script src="./ajax/research_bar.js"></script>
+			</head>
 	<body>
+
+
         <nav class="navbar navbar-dark navbar-expand-md bg-faded justify-content-center">
-        <a href="/" class="navbar-brand"><img src="Images/logo.jpg" alt="Videotheque"><br/><span class="text-red text-small">Vos vidéos<br/>en un clic</span></a>
+        <a href="index.php" class="navbar-brand"><img src="Images/logo.jpg" alt="Videotheque"><br/><span class="text-red text-small">Vos vidéos<br/>en un clic</span></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar3">
             <span class="navbar-toggler-icon"></span>
         </button>
