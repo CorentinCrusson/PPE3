@@ -28,11 +28,13 @@ class Allocine
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $query_url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		curl_setopt($ch, CURLOPT_USERAGENT, self::getRandomUserAgent());
+		    curl_setopt($ch, CURLOPT_USERAGENT, self::getRandomUserAgent());
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+
+        curl_setopt($ch, CURLOPT_PROXY, 'http://172.30.137.29');
+        curl_setopt($ch, CURLOPT_PROXYPORT, "3128")
         $response = curl_exec($ch);
         curl_close($ch);
-
         return $response;
     }
 

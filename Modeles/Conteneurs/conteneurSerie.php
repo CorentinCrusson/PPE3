@@ -30,15 +30,17 @@ Class conteneurSerie
 	public function listeDesSeries($retour)
 		{
 		$liste = '<div class="slide blur colonne">';
+		$nb=0;
 		foreach ($this->lesSeries as $uneSerie)
 			{
-				$row = $retour->fetch(PDO::FETCH_NUM);
-				$id = $uneSerie->getIdSerie();
+				$row = $retour->fetch(PDO::FETCH_OBJ);
+				$id = $row->idSupport;
 
-				$liste = $liste.'<div> <div> <img src=./Images/'.$row[0].'
-				title="'.$uneSerie->getTitreSerie().'"/> <p> Ba Bla </p> </div> </div>';
+				$liste = $liste.'<div> <div> <a href="index.php?vue=serie&action=fiche"> <img id='.$id.' src=./Images/'.$row->image.'
+				title="'.$uneSerie->getTitreSerie().'"/> </a> <p> Ba Bla </p> </div> </div>';
+				$nb++;
 
-				if($id%3==0)
+				if($nb%3==0)
 				{
 					$liste = $liste.'</div> <div class="slide blur colonne">';
 				}

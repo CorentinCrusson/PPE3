@@ -28,6 +28,7 @@ function chargerPage()
 			}
 		}
 	$monControleur->affichePiedPage();
+	$monControleur->afficheBarreRecherche();
 }
 	function premier_affichage()
 	{
@@ -77,11 +78,16 @@ function chargerPage()
                             <tbody>
                                 <tr>
                                     <td class='td-table justify-content-center'>
-                                        <form action='index.php?vue=compte&action=verifLogin' method='post'>
-                                            <input class='form-group' type='text' placeholder='Login' name='login'/><br>
-                                            <input class='form-group' type='password' placeholder='Mot de passe' name='password'/><br>
-                                            <input class='btn btn-secondary mx-auto' type='submit' value='Accéder'/>
-                                        </form>
+																				<form action='index.php?vue=compte&action=verifLogin' method='post'>
+																					<fieldset>
+																									<div class=form-group>
+																							      <label for=inputLogin>Login</label>
+																							      <input type=text class=form-control name='login' placeholder=Enter Login>
+																							    </div>
+		                                            <input class='form-group' type='password' placeholder='Mot de passe' name='password'/><br>
+		                                            <input class='btn btn-secondary mx-auto' type='submit' value='Accéder'/>
+																					</fieldset>
+		                                     </form>
 																				<a href='index.php?vue=compte&action=passwdMissed'> Mot de passe oublié </a>
 																		</td>
                                     <td class='justify-content-center td-table'>

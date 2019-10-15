@@ -18,12 +18,13 @@
             </li>
         </ul>
 
-         ﻿<div class="form-group">
-          <input class="form-control" id="search-video" type="text" placeholder="Search" aria-label="Search">
+        <!--<div class="form-group form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" id="search-video" type="text" placeholder="Search">
         </div>
-        <div style="margin-top: 20px">
-          <div id="result-search"></div> <!-- C'est ici que nous aurons nos résultats de notre recherche -->
-        </div>
+        <div>
+         <div id="result-search"></div> <!-- C'est ici que nous aurons nos résultats de notre recherche -->
+       <!--</div> -->
+
 
         <ul class="nav navbar-nav ml-auto pos-a'vatar justify-content-end">
 
