@@ -308,8 +308,23 @@ class Controleur
 					break;
 
 				case "fiche":
-					$affichage = $this->maVideotheque->listeLesFilms();
-					echo $affichage;
+				echo '<div class="test" style="color: white;">
+						<h2> Titre </h2>
+						<p id="titre"> Game of Throne </p>
+
+						<h2> Réalisateur </h2>
+						<p id="realisateur"> Jean Mouloud </p>
+
+						<h2> Resumé </h2>
+						<p id="resume"> Blabla bla </p>
+
+						<h2> Durée </h2>
+						<p id="duree"> 180 min </p>
+
+						<h2> Genre </h2>
+						<p id="genre"> Amour </p>
+
+				</div>';
 					break;
 
 			}
@@ -332,8 +347,23 @@ class Controleur
 				break;
 
 			case "fiche":
-					$affichage = $this->maVideotheque->listeLesFilms();
-					echo $affichage;
+					echo '<div class="test" style="color: white;">
+							<h2> Titre </h2>
+							<p id="titre"> Game of Throne </p>
+
+							<h2> Réalisateur </h2>
+							<p id="realisateur"> Jean Mouloud </p>
+
+							<h2> Resumé </h2>
+							<p id="resume"> Blabla bla </p>
+
+							<h2> Durée </h2>
+							<p id="duree"> 180 min </p>
+
+							<h2> Genre </h2>
+							<p id="genre"> Amour </p>
+
+					</div>';
 					break;
 
 			}
