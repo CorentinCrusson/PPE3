@@ -372,19 +372,52 @@ class accesBD
 			return $requete;
 		}
 
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		//----------------------------- RETOURNER L IMAGE VIDEO - RESEARCH BAR ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 		//PROCEDURE pour recuperer les informations de la vidéo mis en barre de recherche
 		public function retournerInfos($video)
 		{
-				$requete = $this->conn->prepare("SELECT titreSupport,image
-				FROM support
-				WHERE titreSupport LIKE ?
-				LIMIT 10;");
+				$requete = $this->conn->prepare("SELECT titreSupport,image FROM support WHERE titreSupport LIKE ?	LIMIT 10;");
+
 				$requete->bindValue(1,$video.'%');
 				$requete->execute();
+
 				$requete = $requete->fetchAll();
 
 				return $requete;
 
+		}
+
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		//----------------------------- RETOURNER INFOS SUPPORT - Click Support ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		public function retournerInfosFilm($idSupport)
+		{
+			$requete = $this->conn->prepare("SELECT titreSupport,realisateur,libelleGenre,duree FROM support,genre,film,serie WHERE film.idSupport=support.idSupport AND support.idGenre = genre.idGenre AND support.idSupport = ? LIMIT 1");
+
+			$requete->bindValue(1,$idSupport);
+			$requete->execute();
+			if($requete) {
+				return $requete;
+			}
+
+			return null;
+		}
+
+		public function retournerInfosSerie($idSupport)
+		{
+			$requete = $this->conn->prepare("SELECT titreSupport,realisateur,libelleGenre,resumeSerie FROM support,genre,serie WHERE serie.idSupport=support.idSupport AND support.idGenre = genre.idGenre AND support.idSupport = ? LIMIT 1");
+
+			$requete->bindValue(1,$idSupport);
+			$requete->execute();
+			if($requete) {
+				return $requete;
+			}
+
+			return null;
 		}
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -36,7 +36,7 @@ Class conteneurFilm
 					$row = $retour->fetch(PDO::FETCH_OBJ);
 					$id = $row->idSupport;
 
-					$liste = $liste.'<div> <div> <a href="index.php?vue=film&action=fiche"> <img id='.$id.' src=./Images/'.$row->image.'
+					$liste = $liste.'<div> <div> <a href="index.php?vue=film&action=fiche&id='.$id.' "	> <img id='.$id.' src=./Images/'.$row->image.'
 					 title="'.$unFilm->getTitreFilm().'" /> </a> </div> </div>';
 					 $nb++;
 
