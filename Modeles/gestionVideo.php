@@ -405,6 +405,16 @@ Class gestionVideo
 		return $this->tousLesEpisodes->lesEpisodesAuFormatHTML();
 		}
 
+		//METHODE RETOURNANT LES CONTENUS DRE Supports
+		public function retourneInfosSerie($id)
+		{
+			return $this->maBD->retournerInfosSerie($id);
+		}
+
+		public function retourneInfosFilm($id)
+		{
+			return $this->maBD->retournerInfosFilm($id);
+		}
 
 	}
 

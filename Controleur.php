@@ -304,27 +304,42 @@ class Controleur
 				case "visualiser" :
 					//ici il faut pouvoir visualiser l'ensemble des films
 					$affichage = $this->maVideotheque->listeLesFilms();
-					echo $affichage;
+					echo '<div class="displaySupport" style="visibility=visible">'.$affichage.'</div>';
 					break;
 
-				case "fiche":
-				echo '<div class="test" style="color: white;">
-						<h2> Titre </h2>
-						<p id="titre"> Game of Throne </p>
+					case "fiche":
+						$retour = '';
+						if($_GET['id']) {
+								$resultat = $this->maVideotheque->retourneInfosFilm($_GET['id']);
+								if(isset($resultat))
+								{
+									// résultats
+									$retour = $retour.'<div class="test" style="color: white;">';
 
-						<h2> Réalisateur </h2>
-						<p id="realisateur"> Jean Mouloud </p>
+									while($donnees = $resultat->fetch(PDO::FETCH_OBJ)) {
+										// je remplis un tableau et mettant le nom de la ville en index pour garder le tri
+											$retour = $retour.'<h2> Titre </h2>
+											<p id="titre">'.$donnees->titreSupport.'</p>
 
-						<h2> Resumé </h2>
-						<p id="resume"> Blabla bla </p>
+											<h2> Réalisateur </h2>
+											<p id="realisateur">'.$donnees->realisateur.'</p>
 
-						<h2> Durée </h2>
-						<p id="duree"> 180 min </p>
+											<h2> Resumé </h2>
+											<p id="resume"> Null </p>
 
-						<h2> Genre </h2>
-						<p id="genre"> Amour </p>
+											<h2> Durée </h2>
+											<p id="duree">'.$donnees->duree.'</p>
 
-				</div>';
+											<h2> Genre </h2>
+											<p id="genre">'.$donnees->libelleGenre.'</p>';
+									}
+
+								$retour = $retour.'</div>';
+								}
+
+							}
+
+						echo $retour;
 					break;
 
 			}
@@ -343,28 +358,44 @@ class Controleur
 			case "visualiser" :
 				//ici il faut pouvoir visualiser l'ensemble des Séries
 				$affichage = $this->maVideotheque->listeLesSeries();
-				echo $affichage;
+				echo '<div class="displaySupport">'.$affichage.'</div>';
 				break;
 
 			case "fiche":
-					echo '<div class="test" style="color: white;">
-							<h2> Titre </h2>
-							<p id="titre"> Game of Throne </p>
+				$retour = '';
+				if($_GET['id']) {
+						$resultat = $this->maVideotheque->retourneInfosSerie($_GET['id']);
+						if(isset($resultat))
+						{
+							// résultats
+							$retour = $retour.'<div class="test" style="color: white;">';
 
-							<h2> Réalisateur </h2>
-							<p id="realisateur"> Jean Mouloud </p>
+							while($donnees = $resultat->fetch(PDO::FETCH_OBJ)) {
+								// je remplis un tableau et mettant le nom de la ville en index pour garder le tri
+									$retour = $retour.'<h2> Titre </h2>
+									<p id="titre">'.$donnees->titreSupport.'</p>
 
-							<h2> Resumé </h2>
-							<p id="resume"> Blabla bla </p>
+									<h2> Réalisateur </h2>
+									<p id="realisateur">'.$donnees->realisateur.'</p>
 
-							<h2> Durée </h2>
-							<p id="duree"> 180 min </p>
+									<h2> Resumé </h2>
+									<p id="resume">'.$donnees->resumeSerie.'</p>
 
-							<h2> Genre </h2>
-							<p id="genre"> Amour </p>
+									<h2> Durée </h2>
+									<p id="duree"> Null </p>
 
-					</div>';
-					break;
+									<h2> Genre </h2>
+									<p id="genre">'.$donnees->libelleGenre.'</p>';
+							}
+
+
+						$retour = $retour.'</div>';
+						}
+
+					}
+
+				echo $retour;
+				break;
 
 			}
 		}
