@@ -247,15 +247,16 @@ class accesBD
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//---------------------------CREATION DE LA REQUETE D'INSERTION d'emprunt ------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	public function insertEmprunt($uneDateEmprunt, $unIdClient, $unIdSupport)
+	public function insertEmprunt($uneDateEmprunt, $unIdClient, $unIdSupport,$uneDateFinEmprunt)
 		{
 	    //génération automatique de l'identifiant de l'emprunt
-		$sonId = $this->donneProchainIdentifiantSaison("emprunt","idEmprunt");
+		$sonId = $this->donneProchainIdentifiant("emprunt","idEmprunt");
 		//définition de la requête SQL
-		$requete = $this->conn->prepare("INSERT INTO Emprunt (dateEmprunt, idClient, idSupport) VALUES (?,?,?)");
+		$requete = $this->conn->prepare("INSERT INTO Emprunt (dateEmprunt, idClient, idSupport,dateFinEmprunt) VALUES (?,?,?,?)");
 		$requete->bindValue(1,$uneDateEmprunt);
 		$requete->bindValue(2,$unIdClient);
 		$requete->bindValue(3,$unIdSupport);
+		$requete->bindValue(4,$uneDateFinEmprunt);
 
 		//exécution de la requête SQL
 		if(!$requete->execute())
@@ -372,15 +373,16 @@ class accesBD
 			return $requete;
 		}
 
+
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 		//----------------------------- RETOURNER L IMAGE VIDEO - RESEARCH BAR ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 		//PROCEDURE pour recuperer les informations de la vidéo mis en barre de recherche
-		public function retournerInfos($video)
+		public function retournerInfosRecherche($video)
 		{
-				$requete = $this->conn->prepare("SELECT titreSupport,image FROM support WHERE titreSupport LIKE ?	LIMIT 10;");
+				$requete = $this->conn->prepare("SELECT idSupport,titreSupport,image FROM support WHERE titreSupport LIKE ?	LIMIT 10;");
 
 				$requete->bindValue(1,$video.'%');
 				$requete->execute();
@@ -394,12 +396,39 @@ class accesBD
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 		//----------------------------- RETOURNER INFOS SUPPORT - Click Support ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+		/*public function retournerInfos($id,$type)
+		{
+				//Si ça nous retourne des infos d'un film alors on retourne cette requête
+				if($type='Film')
+				$requete = $this->retournerInfosFilm($id);
+				var_dump(mysql_num_rows($requete));
+				if($requete)
+				{
+					return $requete;
+				}
+
+				$requete = $this->retournerInfosSerie($id);
+
+				if($requete)
+				{
+					return $requete;
+				}
+
+				return null;
+
+		}*/
+
+
 		public function retournerInfosFilm($idSupport)
 		{
-			$requete = $this->conn->prepare("SELECT titreSupport,realisateur,libelleGenre,duree FROM support,genre,film,serie WHERE film.idSupport=support.idSupport AND support.idGenre = genre.idGenre AND support.idSupport = ? LIMIT 1");
+			$requete = $this->conn->prepare("SELECT titreSupport,realisateur,libelleGenre,duree FROM support,genre,film WHERE film.idSupport=support.idSupport AND support.idGenre = genre.idGenre AND support.idSupport = ? LIMIT 1");
 
 			$requete->bindValue(1,$idSupport);
 			$requete->execute();
+
+			$result = $requete;
+
 			if($requete) {
 				return $requete;
 			}
@@ -413,6 +442,24 @@ class accesBD
 
 			$requete->bindValue(1,$idSupport);
 			$requete->execute();
+
+			if($requete) {
+				return $requete;
+			}
+
+			return null;
+		}
+
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		//----------------------------- RETOURNER SERIES/FILM En fonction Genre ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------------------------------------------------------------------------
+		public function retournerSupportGenre($idGenre)
+		{
+			$requete = $this->conn->prepare("SELECT titreSupport,idSupport FROM support,genre WHERE support.idGenre = genre.idGenre AND support.idGenre = ? ");
+
+			$requete->bindValue(1,$idGenre);
+			$requete->execute();
+
 			if($requete) {
 				return $requete;
 			}
@@ -427,7 +474,7 @@ class accesBD
 		{
 		//$prochainId[0]=0;
 		//définition de la requête SQL
-		$stringQuery = $this->specialCase("SELECT * FROM ",$uneTable,"  ORDER BY idClient");
+		$stringQuery = $this->specialCase("SELECT * FROM ",$uneTable);
 		$requete = $this->conn->prepare($stringQuery);
 		$requete->bindValue(1,$unIdentifiant);
 

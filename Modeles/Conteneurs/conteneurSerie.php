@@ -36,7 +36,7 @@ Class conteneurSerie
 				$row = $retour->fetch(PDO::FETCH_OBJ);
 				$id = $row->idSupport;
 
-				$liste = $liste.'<div> <div> <a href="index.php?vue=serie&action=fiche&id='.$id.' "	> <img id='.$id.' src=./Images/'.$row->image.'
+				$liste = $liste.'<div> <div> <a href="index.php?vue=videotheque&action=fiche&id='.$id.' "	> <img id='.$id.' src=./Images/'.$row->image.'
 				title="'.$uneSerie->getTitreSerie().'"/> </a> <p style="color:white;">'.$uneSerie->getTitreSerie().' </p> </div> </div>';
 				$nb++;
 

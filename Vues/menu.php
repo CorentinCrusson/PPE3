@@ -16,6 +16,11 @@
                     </ul>
                 </ul>
             </li>
+            <li class="nav-item active">
+                <ul class="dropdown">
+                    <a href="index.php?vue=videotheque&action=aleatoire">Support Aléatoire</a>
+                </ul>
+            </li>
         </ul>
 
         <!--<div class="form-group form-inline my-2 my-lg-0">

@@ -76,7 +76,8 @@ class Controleur
 				require 'Vues/menu.php';
 				$this->vueSerie($action);
 				break;
-			case 'Videotheque':
+			case 'videotheque':
+				require 'Vues/menu.php';
 				$this->vueRessource($action);
 				break;
 			case "accueil":
@@ -216,7 +217,7 @@ class Controleur
 										$retour = "Abonnement Non Actif";
 										break;
 									default:
-										$retour = "Echec de Connexion";
+										$retour = "Echec de la Verification";
 								}
 									$this->redirection("",$retour);
 									}
@@ -306,41 +307,32 @@ class Controleur
 					$affichage = $this->maVideotheque->listeLesFilms();
 					echo '<div class="displaySupport" style="visibility=visible">'.$affichage.'</div>';
 					break;
-
-					case "fiche":
+					
+					case "emprunter":
 						$retour = '';
 						if($_GET['id']) {
-								$resultat = $this->maVideotheque->retourneInfosFilm($_GET['id']);
+
+								$idClient = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getIdClient();
+
+								$resultat = $this->maVideotheque->ajouteUnEmprunt(date("Y-m-d"),$idClient,$_GET['id'],3);
+
+								$retour = $retour.'<div class="test" style="color: white;">';
 								if(isset($resultat))
 								{
 									// résultats
-									$retour = $retour.'<div class="test" style="color: white;">';
+									$retour = $retour.'<p> Emprunt Effectué ! </p>';
 
-									while($donnees = $resultat->fetch(PDO::FETCH_OBJ)) {
-										// je remplis un tableau et mettant le nom de la ville en index pour garder le tri
-											$retour = $retour.'<h2> Titre </h2>
-											<p id="titre">'.$donnees->titreSupport.'</p>
+								} else {
 
-											<h2> Réalisateur </h2>
-											<p id="realisateur">'.$donnees->realisateur.'</p>
-
-											<h2> Resumé </h2>
-											<p id="resume"> Null </p>
-
-											<h2> Durée </h2>
-											<p id="duree">'.$donnees->duree.'</p>
-
-											<h2> Genre </h2>
-											<p id="genre">'.$donnees->libelleGenre.'</p>';
-									}
-
-								$retour = $retour.'</div>';
+									$retour = $retour.'<p> /!\ Erreur au niveau de l\Emprunt </p>';
 								}
 
-							}
+
+								$retour = $retour.'</div>';
+						}
 
 						echo $retour;
-					break;
+						break;
 
 			}
 		}
@@ -361,48 +353,37 @@ class Controleur
 				echo '<div class="displaySupport">'.$affichage.'</div>';
 				break;
 
-			case "fiche":
-				$retour = '';
-				if($_GET['id']) {
-						$resultat = $this->maVideotheque->retourneInfosSerie($_GET['id']);
-						if(isset($resultat))
-						{
-							// résultats
+				case "emprunter":
+					$retour = '';
+					if($_GET['id']) {
+
+							$idClient = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getIdClient();
+							$resultat = $this->maVideotheque->ajouteUnEmprunt(date("Y-m-d"),$idClient,$_GET['id'],1);
+
 							$retour = $retour.'<div class="test" style="color: white;">';
+							if(isset($resultat))
+							{
+								// résultats
+								$retour = $retour.'<p> Emprunt Effectué ! </p>';
 
-							while($donnees = $resultat->fetch(PDO::FETCH_OBJ)) {
-								// je remplis un tableau et mettant le nom de la ville en index pour garder le tri
-									$retour = $retour.'<h2> Titre </h2>
-									<p id="titre">'.$donnees->titreSupport.'</p>
+							} else {
 
-									<h2> Réalisateur </h2>
-									<p id="realisateur">'.$donnees->realisateur.'</p>
-
-									<h2> Resumé </h2>
-									<p id="resume">'.$donnees->resumeSerie.'</p>
-
-									<h2> Durée </h2>
-									<p id="duree"> Null </p>
-
-									<h2> Genre </h2>
-									<p id="genre">'.$donnees->libelleGenre.'</p>';
+								$retour = $retour.'<p> /!\ Erreur au niveau de l\Emprunt </p>';
 							}
 
 
-						$retour = $retour.'</div>';
-						}
-
+							$retour = $retour.'</div>';
 					}
 
-				echo $retour;
-				break;
+					echo $retour;
+					break;
 
 			}
 		}
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//----------------------------Vidéotheque-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	private function vueVideotheque($action)
+	private function vueRessource($action)
 		{
 		//SELON l'action demandée
 		switch ($action)
@@ -443,6 +424,70 @@ class Controleur
 					//$_SESSION['Controleur'] = serialize($this);
 					}
 				break;
+
+			case "fiche":
+				$retour = '';
+
+				if($_GET['id']) {
+						$id = $_GET['id'];
+						$resultat = $this->maVideotheque->retournerInfosSupport($id,"film");
+						if(isset($resultat))
+						{
+							// résultats
+							$retour = $retour.'<div class="test" style="color: white;">';
+
+							while($donnees = $resultat->fetch(PDO::FETCH_OBJ)) {
+								// je remplis un tableau et mettant le nom de la ville en index pour garder le tri
+									$retour = $retour.'<h2> Titre </h2>
+									<p id="titre">'.$donnees->titreSupport.'</p>
+
+									<h2> Réalisateur </h2>
+									<p id="realisateur">'.$donnees->realisateur.'</p>
+
+									<h2> Resumé </h2>
+									<p id="resume">Null</p>
+
+									<h2> Durée </h2>
+									<p id="duree">'.$donnees->duree.'</p>
+
+									<h2> Genre </h2>
+									<p id="genre">'.$donnees->libelleGenre.'</p>';
+							}
+
+							if(empty($donnees)) {
+								$resultat = $this->maVideotheque->retournerInfosSupport($id,'serie');;
+									while($donnees = $resultat->fetch(PDO::FETCH_OBJ)) {
+										// je remplis un tableau et mettant le nom de la ville en index pour garder le tri
+											$retour = $retour.'<h2> Titre </h2>
+											<p id="titre">'.$donnees->titreSupport.'</p>
+
+											<h2> Réalisateur </h2>
+											<p id="realisateur">'.$donnees->realisateur.'</p>
+
+											<h2> Resumé </h2>
+											<p id="resume">'.$donnees->resumeSerie.'</p>
+
+											<h2> Durée </h2>
+											<p id="duree">Null</p>
+
+											<h2> Genre </h2>
+											<p id="genre">'.$donnees->libelleGenre.'</p>';
+									}
+							}
+
+						$retour = $retour.'<a href="index.php?vue=serie&action=emprunter&id='.$_GET['id'].'"> Emprunter </a> </div> ';
+						}
+
+					}
+
+				echo $retour;
+				break;
+
+				case "aleatoire":
+					$id = $this->maVideotheque->retourneAleaSupport(rand(1,$this->maVideotheque->donneNbGenres()));
+					$page = '?vue=videotheque&action=fiche&id='.$id;
+					$this->redirection($page,"",0);
+					break;
 			}
 		}
 
@@ -455,7 +500,7 @@ class Controleur
 		}
 
 		//Methode permettant de rediriger vers une page, en écrivant un message lors de la transition
-		private function redirection($page,$message="")
+		private function redirection($page,$message="",$content=1)
 		{
 			echo "</nav>
 					<div class='container h-100'>
@@ -463,7 +508,8 @@ class Controleur
 							<span class='text-white'>".$message."</span>
 						</div>
 					</div>
-					<meta http-equiv='refresh' content='1;index.php".$page."'>";
+					<meta http-equiv='refresh' content='.$content.;index.php.$page'>
+					";
 		}
 
 		/*METHODE POUR AFFICHER le résultat de la recherche

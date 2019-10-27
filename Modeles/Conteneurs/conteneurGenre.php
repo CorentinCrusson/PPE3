@@ -21,7 +21,7 @@ Class conteneurGenre
 		}
 
 	//METHODE RETOURNANT LE NOMBRE de genres-------------------------------------------------------------------------------
-	public function nbGenre()
+	public function nbGenres()
 		{
 		return $this->lesGenres->count();
 		}
