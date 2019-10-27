@@ -236,18 +236,20 @@ Class gestionVideo
 		}
 
     //METHODE INSERANT UN EMPRUNT--------------------------------------------------------------------------------------------------------
-	public function ajouteUnEmprunt($uneDateEmprunt, $unIdClient, $unIdSupport)
+	public function ajouteUnEmprunt($uneDateEmprunt, $unIdClient, $unIdSupport,$dureeEmprunt)
 		{
+			$uneDateFinEmprunt = date("Y-m-d", mktime(0,0,0, date("m")+$dureeEmprunt  , date("d"), date("Y")) );
 		//insertion de l'emprunt  dans la base de données
-		$sonCode=$this->maBD->insertEmprunt($uneDateEmprunt, $unIdClient, $unIdSupport);
+		$sonCode=$this->maBD->insertEmprunt($uneDateEmprunt, $unIdClient, $unIdSupport,$uneDateFinEmprunt);
 
 		//instanciation de l'emprunt et ajout de celui-ci dans la collection
 		$leClient = null;
-		$leClient = $leClient->donneObjetClientDepuisNumero($unIdClient);
-		$leGenre = null;
+		$leClient = $this->getLesClients()->donneObjetClientDepuisNumero($unIdClient);
 		$leSupport = null;
-		$leSupport = $leSupport->donneObjetSupportDepuisNumero($unIdSupport);
-		$this->tousLesEmprunts->ajouteUnEmprunt($sonCode, $uneDateEmprunt,$leClient,$leSupport);
+		$leSupport = $this->tousLesSupports->donneObjetSupportDepuisNumero($unIdSupport);
+		$this->tousLesEmprunts->mettreUnEmpruntEnPlus($sonCode, $uneDateEmprunt,$leClient,$leSupport,$uneDateFinEmprunt);
+
+		return true;
 		}
 	//METHODE INSERANT UN EPISODE --------------------------------------------------------------------------------------------------------
 	public function ajouteUnEpisode($unIdSerie, $unNumSaison, $unTitreEpisode, $uneDuree)
@@ -339,6 +341,11 @@ Class gestionVideo
 		 return $this->tousLesClients;
 	 }
 
+	 private function getLesSupports()
+	 {
+		 return $this->tousLesSupports;
+	 }
+
 	//METHODE RETOURNANT LA LISTE DES differents elements-------------------------------------------------------------------------------------------------------
 	public function listeLesClients($login)
 		{
@@ -406,14 +413,32 @@ Class gestionVideo
 		}
 
 		//METHODE RETOURNANT LES CONTENUS DRE Supports
-		public function retourneInfosSerie($id)
+		public function retournerInfosSupport($id,$type)
 		{
-			return $this->maBD->retournerInfosSerie($id);
+			if($type=="film")
+			{
+				$rep = $this->maBD->retournerInfosFilm($id);
+			} else {
+				$rep =  $this->maBD->retournerInfosSerie($id);
+			}
+
+			return $rep;
 		}
 
-		public function retourneInfosFilm($id)
+		//RETOURNE UN SUPPORT ALEATOIRE ( FILM OU SERIE ) en fonction d'un genre
+		public function retourneAleaSupport($idGenre=0)
 		{
-			return $this->maBD->retournerInfosFilm($id);
+			$supports = array();
+
+			$resultat = $this->maBD->retournerSupportGenre($idGenre);
+
+			while($donnees = $resultat->fetch(PDO::FETCH_OBJ)) {
+
+				array_push($supports,$donnees->idSupport);
+			}
+
+			$id = $supports[ rand( 0,count($supports)-1 ) ];
+			return $id;
 		}
 
 	}
