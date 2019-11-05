@@ -269,6 +269,37 @@ class accesBD
 		}
 
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		//---------------------------CREATION DE LA REQUETE DE SUPPRESION d'emprunt ------------------------------------------------------------------------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+		public function supprimerEmprunt($idClient,$idSupport)
+		{
+			$today = date("Y-m-d");
+			//Verification Presence Emprunt ou Non
+			$requete = $this->conn->prepare("SELECT COUNT(*) FROM emprunt WHERE dateFinEmprunt >= ".$today." AND idSupport = ".$idSupport." AND idClient=".$idClient." ;");
+			$requete->execute();
+
+			if($requete->fetch()[0]!='0') {
+
+				//---------Suppresion d'un Emprunt--------------
+				$requete = $this->conn->prepare("DELETE FROM emprunt WHERE idSupport = (?) AND idClient=(?) AND dateFinEmprunt >= (?) ;");
+				$requete->bindValue(1,$idSupport);
+				$requete->bindValue(2,$idClient);
+				$requete->bindValue(3,$today);
+
+				if(!$requete->execute())
+				{
+					die("Erreur dans SupprimerEmprunt : ".$requete->errorCode());
+				}
+
+				return true;
+			}
+
+			return false;
+		}
+
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 		//--------------------------- Vérification Activité Compte ------------------------------------------------------------------------------------------------------------------------------------------------
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -364,7 +395,7 @@ class accesBD
 		public function donneImagesEmprunts($loginClient)
 		{
 			$today = date("Y-m-d");
-			$requete = $this->conn->prepare("SELECT DISTINCT s.image FROM SUPPORT s, CLIENT c, EMPRUNT e WHERE c.idClient = e.idClient AND s.idSupport = e.idSupport AND c.login = (?) AND e.dateFinEmprunt >= (?)");
+			$requete = $this->conn->prepare("SELECT DISTINCT s.image,s.idSupport FROM SUPPORT s, CLIENT c, EMPRUNT e WHERE c.idClient = e.idClient AND s.idSupport = e.idSupport AND c.login = (?) AND e.dateFinEmprunt >= (?)");
 
 			$requete->bindValue(1,$loginClient);
 			$requete->bindValue(2,$today);

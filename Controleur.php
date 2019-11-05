@@ -51,10 +51,10 @@ class Controleur
 		require 'Vues/menu.php';
 		}
 
-	public function afficheBarreRecherche()
+	/*public function afficheBarreRecherche()
 	{
 		require 'Vues/searchBar.php';
-	}
+	}*/
 
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -264,6 +264,7 @@ class Controleur
 				$_SESSION['nom'] = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getNomClient();
 				$_SESSION['prenom'] = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getPrenomClient();
 				require 'Vues/menu.php';
+				require 'Vues/searchBar.php';
 
 				//TEST API1234
 				$code = 27061;
@@ -303,11 +304,12 @@ class Controleur
 
 				//CAS visualisation de tous les films-------------------------------------------------------------------------------------------------
 				case "visualiser" :
+					require 'Vues/searchBar.php';
 					//ici il faut pouvoir visualiser l'ensemble des films
 					$affichage = $this->maVideotheque->listeLesFilms();
-					echo '<div class="displaySupport" style="visibility=visible">'.$affichage.'</div>';
+					echo '<div id="displaySupport" style="visibility=visible">'.$affichage.'</div>';
 					break;
-					
+
 					case "emprunter":
 						$retour = '';
 						if($_GET['id']) {
@@ -331,9 +333,32 @@ class Controleur
 								$retour = $retour.'</div>';
 						}
 
-						echo $retour;
+						$this->redirection("",$retour);
 						break;
 
+					case "supprimer":
+							$retour = '';
+							if($_GET['id']) {
+									$idClient = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getIdClient();
+									$resultat = $this->maVideotheque->supprimerUnEmprunt($idClient,$_GET['id']);
+
+									$retour = $retour.'<div class="test" style="color: white;">';
+									if($resultat)
+									{
+										// résultats
+										$retour = $retour.'<p> Emprunt Supprimé ! </p>';
+
+									} else {
+
+										$retour = $retour.'<p> /!\ Ce support n\'a pas été ajouté </p>';
+									}
+
+
+									$retour = $retour.'</div>';
+							}
+							$this->redirection("",$retour,3);
+
+							break;
 			}
 		}
 
@@ -348,9 +373,10 @@ class Controleur
 
 			//CAS visualisation de toutes les Series-------------------------------------------------------------------------------------------------
 			case "visualiser" :
+				require 'Vues/searchBar.php';
 				//ici il faut pouvoir visualiser l'ensemble des Séries
 				$affichage = $this->maVideotheque->listeLesSeries();
-				echo '<div class="displaySupport">'.$affichage.'</div>';
+				echo '<div id="displaySupport">'.$affichage.'</div>';
 				break;
 
 				case "emprunter":
@@ -358,7 +384,7 @@ class Controleur
 					if($_GET['id']) {
 
 							$idClient = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getIdClient();
-							$resultat = $this->maVideotheque->ajouteUnEmprunt(date("Y-m-d"),$idClient,$_GET['id'],1);
+							$resultat = $this->maVideotheque->ajouteUnEmprunt(date("Y-m-d"),$idClient,$_GET['id']);
 
 							$retour = $retour.'<div class="test" style="color: white;">';
 							if(isset($resultat))
@@ -375,8 +401,33 @@ class Controleur
 							$retour = $retour.'</div>';
 					}
 
-					echo $retour;
+					$this->redirection("",$retour);
 					break;
+
+				case "supprimer":
+						$retour = '';
+						if($_GET['id']) {
+
+								$idClient = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getIdClient();
+								$resultat = $this->maVideotheque->supprimerUnEmprunt($idClient,$_GET['id']);
+
+								$retour = $retour.'<div class="test" style="color: white;">';
+								if($resultat)
+								{
+									// résultats
+									$retour = $retour.'<p> Emprunt Supprimé ! </p>';
+
+								} else {
+
+									$retour = $retour.'<p> /!\ Ce support n\'a pas été ajouté </p>';
+								}
+
+
+								$retour = $retour.'</div>';
+						}
+
+						$this->redirection("",$retour,3);
+						break;
 
 			}
 		}
@@ -430,7 +481,11 @@ class Controleur
 
 				if($_GET['id']) {
 						$id = $_GET['id'];
-						$resultat = $this->maVideotheque->retournerInfosSupport($id,"film");
+						$support ="film";
+						$empty = true;
+
+						$resultat = $this->maVideotheque->retournerInfosSupport($id,$support);
+
 						if(isset($resultat))
 						{
 							// résultats
@@ -452,10 +507,12 @@ class Controleur
 
 									<h2> Genre </h2>
 									<p id="genre">'.$donnees->libelleGenre.'</p>';
+									$empty = false;
 							}
 
-							if(empty($donnees)) {
-								$resultat = $this->maVideotheque->retournerInfosSupport($id,'serie');;
+							if($empty) {
+								$support = "serie";
+								$resultat = $this->maVideotheque->retournerInfosSupport($id,$support);
 									while($donnees = $resultat->fetch(PDO::FETCH_OBJ)) {
 										// je remplis un tableau et mettant le nom de la ville en index pour garder le tri
 											$retour = $retour.'<h2> Titre </h2>
@@ -475,7 +532,8 @@ class Controleur
 									}
 							}
 
-						$retour = $retour.'<a href="index.php?vue=serie&action=emprunter&id='.$_GET['id'].'"> Emprunter </a> </div> ';
+						$retour = $retour.'<a href="index.php?vue='.$support.'&action=emprunter&id='.$_GET['id'].'"> Emprunter </a>';
+						$retour = $retour.'<a href="index.php?vue='.$support.'&action=supprimer&id='.$_GET['id'].'"> Supprimer </a> </div> ';
 						}
 
 					}
@@ -508,7 +566,7 @@ class Controleur
 							<span class='text-white'>".$message."</span>
 						</div>
 					</div>
-					<meta http-equiv='refresh' content='.$content.;index.php.$page'>
+					<meta http-equiv='refresh' content='.$content.;index.php$page'>
 					";
 		}
 

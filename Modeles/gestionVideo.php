@@ -291,6 +291,14 @@ Class gestionVideo
 				$this->maBD->updateClient($unId, $nomClient,$prenomClient,$mailClient,$passwdClient);
 			}
 
+	//METHODE SUPPRIMANT UN EMPRUNT--------------------------------------------------------------------------------------------------------
+	public function supprimerUnEmprunt($unIdClient, $unIdSupport)
+		{
+			$requete = $this->maBD->supprimerEmprunt($unIdClient, $unIdSupport);
+
+			return $requete;
+		}
+
 	//METHODE RETOURNANT LE NOMBRE DE CLIENT------------------------------------------------------------------------------------------------
 	public function donneNbClients()
 		{
@@ -374,8 +382,8 @@ Class gestionVideo
 	public function listeLesEmprunts($login)
 		{
 			$retour = $this->maBD->donneImagesEmprunts($login);
-		 	$liste = $this->tousLesEmprunts->listeDesEmprunts($login,$retour);
-			echo $liste;
+			$retour = $this->tousLesEmprunts->listeDesEmprunts($login,$retour);
+			return $retour;
 		}
 	public function listeLesEpisodes()
 		{

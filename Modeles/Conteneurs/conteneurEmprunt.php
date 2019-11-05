@@ -30,7 +30,7 @@ Class conteneurEmprunt
 	//METHODE RETOURNANT LA LISTE DES Emprunts -----------------------------------------------------------------------------------------
 	public function listeDesEmprunts($unLogin,$retour)
 		{
-		$liste = '';
+		$liste = '<div class="search_bar_img slide colonne" style="color: white ;">';
 		$i=0;
 		$dateEmprunts = array();
 	/*	$this->listeEmprunt = new arrayObject();
@@ -48,11 +48,15 @@ Class conteneurEmprunt
 
 				if ($leClient->getLoginClient()==$unLogin && $unEmprunt->getDateFinEmprunt() > date("Y-m-d") ) {
 						$row = $retour->fetch(PDO::FETCH_NUM);
-
-		  			$liste = $liste.'<img src=./Images/'.$row[0].' title="ah"/>';
+						if($row[0]!=null) {
+							$liste = $liste.'
+							<div> <div> <a href="index.php?vue=videotheque&action=fiche&id='.$row[1].'">
+							<img center src="./Images/'.$row[0].'" /> </a></div> </div>
+							';
+						}
 					}
 			}
-		return $liste;
+		return $liste.'</div>';
 		}
 
 		//METHODE RETOURNANT LA LISTE DES emprunts DANS UNE BALISE <SELECT>------------------------------------------------------------------
