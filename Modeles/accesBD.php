@@ -364,11 +364,13 @@ class accesBD
 		public function donneImagesEmprunts($loginClient)
 		{
 			$today = date("Y-m-d");
-			$requete = $this->conn->prepare("SELECT DISTINCT s.image FROM SUPPORT s, CLIENT c, EMPRUNT e WHERE c.idClient = e.idClient AND s.idSupport = e.idSupport AND c.login = (?) AND e.dateFinEmprunt >= (?)");
+			$requete = $this->conn->prepare("SELECT DISTINCT s.image,s.idSupport FROM SUPPORT s, CLIENT c, EMPRUNT e WHERE c.idClient = e.idClient AND s.idSupport = e.idSupport AND c.login = (?) AND e.dateFinEmprunt >= (?)");
 
 			$requete->bindValue(1,$loginClient);
 			$requete->bindValue(2,$today);
 			$requete->execute();
+
+			$requete = $requete->fetchAll();
 
 			return $requete;
 		}

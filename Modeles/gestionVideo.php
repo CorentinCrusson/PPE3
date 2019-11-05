@@ -374,8 +374,16 @@ Class gestionVideo
 	public function listeLesEmprunts($login)
 		{
 			$retour = $this->maBD->donneImagesEmprunts($login);
-		 	$liste = $this->tousLesEmprunts->listeDesEmprunts($login,$retour);
-			echo $liste;
+			$retour = $this->tousLesEmprunts->listeDesEmprunts($login,$retour);
+			$liste = '<div class="search_bar_img slide colonne" style="color: white ;">';
+
+			foreach($retour as $r){
+			 	$liste = '
+				<div> <div> <a href="index.php?vue=videotheque&action=fiche&id='.$r['idSupport'].'>
+				<img center src=./Images/'.$r['image'].'/> </a>'.$r['titreSupport'].'</div> </div>
+				';
+			}
+			echo $liste.'</div>';
 		}
 	public function listeLesEpisodes()
 		{

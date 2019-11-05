@@ -307,7 +307,7 @@ class Controleur
 					$affichage = $this->maVideotheque->listeLesFilms();
 					echo '<div class="displaySupport" style="visibility=visible">'.$affichage.'</div>';
 					break;
-					
+
 					case "emprunter":
 						$retour = '';
 						if($_GET['id']) {
@@ -430,7 +430,11 @@ class Controleur
 
 				if($_GET['id']) {
 						$id = $_GET['id'];
-						$resultat = $this->maVideotheque->retournerInfosSupport($id,"film");
+						$support ="film";
+						$empty = true;
+
+						$resultat = $this->maVideotheque->retournerInfosSupport($id,$support);
+
 						if(isset($resultat))
 						{
 							// résultats
@@ -452,10 +456,12 @@ class Controleur
 
 									<h2> Genre </h2>
 									<p id="genre">'.$donnees->libelleGenre.'</p>';
+									$empty = false;
 							}
 
-							if(empty($donnees)) {
-								$resultat = $this->maVideotheque->retournerInfosSupport($id,'serie');;
+							if($empty) {
+								$support = "serie";
+								$resultat = $this->maVideotheque->retournerInfosSupport($id,$support);
 									while($donnees = $resultat->fetch(PDO::FETCH_OBJ)) {
 										// je remplis un tableau et mettant le nom de la ville en index pour garder le tri
 											$retour = $retour.'<h2> Titre </h2>
@@ -475,7 +481,8 @@ class Controleur
 									}
 							}
 
-						$retour = $retour.'<a href="index.php?vue=serie&action=emprunter&id='.$_GET['id'].'"> Emprunter </a> </div> ';
+						$retour = $retour.'<a href="index.php?vue='.$support.'&action=emprunter&id='.$_GET['id'].'"> Emprunter </a>';
+						$retour = $retour.'<a href="index.php?vue='.$support.'&action=supprimer&id='.$_GET['id'].'"> Supprimer </a> </div> ';
 						}
 
 					}
