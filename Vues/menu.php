@@ -18,7 +18,7 @@
             </li>
             <li class="nav-item active">
                 <ul class="dropdown">
-                    <a href="index.php?vue=videotheque&action=aleatoire">Support Aléatoire</a>
+                    <button class="btn btn-secondary" type="button" ><a href="index.php?vue=videotheque&action=aleatoire" style="text-decoration:none;color:white;" >Support Aléatoire</a></button>
                 </ul>
             </li>
         </ul>

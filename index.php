@@ -28,7 +28,7 @@ function chargerPage()
 			}
 		}
 	$monControleur->affichePiedPage();
-	$monControleur->afficheBarreRecherche();
+	//$monControleur->afficheBarreRecherche();
 }
 	function premier_affichage()
 	{
