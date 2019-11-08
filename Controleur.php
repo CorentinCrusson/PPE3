@@ -484,6 +484,7 @@ class Controleur
 						$support ="film";
 						$empty = true;
 
+						$idClient = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getIdClient();
 						$resultat = $this->maVideotheque->retournerInfosSupport($id,$support);
 
 						if(isset($resultat))
@@ -493,20 +494,27 @@ class Controleur
 
 							while($donnees = $resultat->fetch(PDO::FETCH_OBJ)) {
 								// je remplis un tableau et mettant le nom de la ville en index pour garder le tri
-									$retour = $retour.'<h2> Titre </h2>
-									<p id="titre">'.$donnees->titreSupport.'</p>
+									$retour = $retour.'
+									<div style="float:left;width:35%;padding: 5%;">
+										<img src="./Images/'.$donnees->image.'" />
+									</div>
 
-									<h2> Réalisateur </h2>
-									<p id="realisateur">'.$donnees->realisateur.'</p>
+									<div style="float:left;width:25%;padding: 5%">
+										<h2> Titre </h2>
+										<p id="titre">'.$donnees->titreSupport.'</p>
 
-									<h2> Resumé </h2>
-									<p id="resume">Null</p>
+										<h2> Réalisateur </h2>
+										<p id="realisateur">'.$donnees->realisateur.'</p>
 
-									<h2> Durée </h2>
-									<p id="duree">'.$donnees->duree.'</p>
+										<h2> Resumé </h2>
+										<p id="resume">Null</p>
 
-									<h2> Genre </h2>
-									<p id="genre">'.$donnees->libelleGenre.'</p>';
+										<h2> Durée </h2>
+										<p id="duree">'.$donnees->duree.'</p>
+
+										<h2> Genre </h2>
+										<p id="genre">'.$donnees->libelleGenre.'</p>
+									';
 									$empty = false;
 							}
 
@@ -532,8 +540,12 @@ class Controleur
 									}
 							}
 
-						$retour = $retour.'<a href="index.php?vue='.$support.'&action=emprunter&id='.$_GET['id'].'"> Emprunter </a>';
-						$retour = $retour.'<a href="index.php?vue='.$support.'&action=supprimer&id='.$_GET['id'].'"> Supprimer </a> </div> ';
+							if($this->maVideotheque->supprimerUnEmprunt($idClient,$id)) {
+								$retour = $retour.'<a href="index.php?vue='.$support.'&action=supprimer&id='.$_GET['id'].'"> Supprimer </a> </div> ';
+						  } else {
+								$retour = $retour.'<a href="index.php?vue='.$support.'&action=emprunter&id='.$_GET['id'].'"> Emprunter </a> </div>';
+							}
+							$retour = $retour.'</div>';
 						}
 
 					}
@@ -542,7 +554,11 @@ class Controleur
 				break;
 
 				case "aleatoire":
-					$id = $this->maVideotheque->retourneAleaSupport(rand(1,$this->maVideotheque->donneNbGenres()));
+					if(isset($_GET['genre'])) {
+						$id = $this->maVideotheque->retourneAleaSupport($_GET['genre']);
+					} else {
+						$id = $this->maVideotheque->retourneAleaSupport(rand(1,$this->maVideotheque->donneNbGenres()));
+					}
 					$page = '?vue=videotheque&action=fiche&id='.$id;
 					$this->redirection($page,"",0);
 					break;

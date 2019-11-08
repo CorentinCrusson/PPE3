@@ -273,7 +273,7 @@ class accesBD
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-		public function supprimerEmprunt($idClient,$idSupport)
+		public function supprimerEmprunt($idClient,$idSupport,$action=false)
 		{
 			$today = date("Y-m-d");
 			//Verification Presence Emprunt ou Non
@@ -281,18 +281,19 @@ class accesBD
 			$requete->execute();
 
 			if($requete->fetch()[0]!='0') {
+				if($action) {
+					//---------Suppresion d'un Emprunt--------------
+					$requete = $this->conn->prepare("DELETE FROM emprunt WHERE idSupport = (?) AND idClient=(?) AND dateFinEmprunt >= (?) ;");
+					$requete->bindValue(1,$idSupport);
+					$requete->bindValue(2,$idClient);
+					$requete->bindValue(3,$today);
 
-				//---------Suppresion d'un Emprunt--------------
-				$requete = $this->conn->prepare("DELETE FROM emprunt WHERE idSupport = (?) AND idClient=(?) AND dateFinEmprunt >= (?) ;");
-				$requete->bindValue(1,$idSupport);
-				$requete->bindValue(2,$idClient);
-				$requete->bindValue(3,$today);
+					if(!$requete->execute())
+					{
+						die("Erreur dans SupprimerEmprunt : ".$requete->errorCode());
+					}
 
-				if(!$requete->execute())
-				{
-					die("Erreur dans SupprimerEmprunt : ".$requete->errorCode());
 				}
-
 				return true;
 			}
 
@@ -425,35 +426,36 @@ class accesBD
 		}
 
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-		//----------------------------- RETOURNER INFOS SUPPORT - Click Support ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+		//----------------------------- RETOURNER EMPRUNTER OU NON ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-		/*public function retournerInfos($id,$type)
+		/*
+		public function emprunter($idSupport)
 		{
 				//Si ça nous retourne des infos d'un film alors on retourne cette requête
-				if($type='Film')
-				$requete = $this->retournerInfosFilm($id);
-				var_dump(mysql_num_rows($requete));
-				if($requete)
-				{
-					return $requete;
-				}
+				$today = date("Y-m-d");
+				$requete = $this->conn->prepare("SELECT COUNT(*) FROM SUPPORT s WHERE idSupport = (?) AND dateFinEmprunt >= (?)");
 
-				$requete = $this->retournerInfosSerie($id);
+				$requete->bindValue(1,$idSupport);
+				$requete->bindValue(2,$today);
+
+				$requete->execute();
 
 				if($requete)
 				{
-					return $requete;
+					if($requete->fetch()[0]!="0")
+					{
+						return true;
+					}
 				}
 
-				return null;
+				return false;
 
 		}*/
 
 
 		public function retournerInfosFilm($idSupport)
 		{
-			$requete = $this->conn->prepare("SELECT titreSupport,realisateur,libelleGenre,duree FROM support,genre,film WHERE film.idSupport=support.idSupport AND support.idGenre = genre.idGenre AND support.idSupport = ? LIMIT 1");
+			$requete = $this->conn->prepare("SELECT image,titreSupport,realisateur,libelleGenre,duree FROM support,genre,film WHERE film.idSupport=support.idSupport AND support.idGenre = genre.idGenre AND support.idSupport = ? LIMIT 1");
 
 			$requete->bindValue(1,$idSupport);
 			$requete->execute();
@@ -469,7 +471,7 @@ class accesBD
 
 		public function retournerInfosSerie($idSupport)
 		{
-			$requete = $this->conn->prepare("SELECT titreSupport,realisateur,libelleGenre,resumeSerie FROM support,genre,serie WHERE serie.idSupport=support.idSupport AND support.idGenre = genre.idGenre AND support.idSupport = ? LIMIT 1");
+			$requete = $this->conn->prepare("SELECT image,titreSupport,realisateur,libelleGenre,resumeSerie FROM support,genre,serie WHERE serie.idSupport=support.idSupport AND support.idGenre = genre.idGenre AND support.idSupport = ? LIMIT 1");
 
 			$requete->bindValue(1,$idSupport);
 			$requete->execute();
