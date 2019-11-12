@@ -121,6 +121,7 @@ class Controleur
 				require 'Vues/menu.php';
 				$affichage = $this->maVideotheque->recherche($_SESSION['search']);
 				echo $affichage;
+				//A
 				break;
 
 			//CAS enregistrement d'une modification sur le compte------------------------------------------------------------------------------
@@ -307,7 +308,7 @@ class Controleur
 					$affichage = $this->maVideotheque->listeLesFilms();
 					echo '<div class="displaySupport" style="visibility=visible">'.$affichage.'</div>';
 					break;
-					
+
 					case "emprunter":
 						$retour = '';
 						if($_GET['id']) {
