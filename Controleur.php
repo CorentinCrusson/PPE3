@@ -48,6 +48,13 @@ class Controleur
 	public function afficheMenu()
 		{
 		//appel de la vue du menu
+		if(isset($_SESSION['login'])) {
+			if(!isset($_SESSION['nom'])) {
+				$_SESSION['nom'] = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getNomClient();
+				$_SESSION['prenom'] = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getPrenomClient();
+			}
+		}
+		$_SESSION['lesGenres'] = $this->maVideotheque->lesGenresAuFormatHTML();
 		require 'Vues/menu.php';
 		}
 
@@ -66,21 +73,23 @@ class Controleur
 		switch ($vue)
 			{
 			case 'compte':
+
 				$this->vueCompte($action);
 				break;
 			case 'film':
-				require 'Vues/menu.php';
+				$this->afficheMenu();
 				$this->vueFilm($action);
 				break;
 			case 'serie':
-				require 'Vues/menu.php';
+				$this->afficheMenu();
 				$this->vueSerie($action);
 				break;
 			case 'videotheque':
-				require 'Vues/menu.php';
+				$this->afficheMenu();
 				$this->vueRessource($action);
 				break;
 			case "accueil":
+				$this->afficheMenu();
 				$this->vueAccueil($action);
 				break;
 			/*case "search":
@@ -103,12 +112,12 @@ class Controleur
 			//CAS visualisation de mes informations-------------------------------------------------------------------------------------------------
 			case 'visualiser' :
 				//ici il faut pouvoir avoir accès au information de l'internaute connecté
-				$_SESSION['lesClients'] = $this->maVideotheque->listeLesClients($_SESSION['login']);
-
+				$this->afficheMenu();
 				require 'Vues/profil.php';
 				break;
+
 			case 'visuEmprunt':
-				require 'Vues/menu.php';
+				$this->afficheMenu();
 				$affichage = $this->maVideotheque->listeLesEmprunts($_SESSION['login']);
 				echo $affichage;
 				break;
@@ -118,7 +127,7 @@ class Controleur
 					break;
 
 			case 'search':
-				require 'Vues/menu.php';
+				$this->afficheMenu();
 				$affichage = $this->maVideotheque->recherche($_SESSION['search']);
 				echo $affichage;
 				break;
@@ -126,7 +135,8 @@ class Controleur
 			//CAS enregistrement d'une modification sur le compte------------------------------------------------------------------------------
 			case 'modifier' :
 				// ici il faut pouvoir modifier le mot de passe de l'utilisateur
-				require 'Vues/modifClient.php';
+				$this->afficheMenu();
+				require 'Vues/Modifier_Profil.php';
 				break;
 			//CAS ajouter un utilisateur ------------------------------------------------------------------------------
 			case 'nouveauLogin' :
@@ -239,14 +249,18 @@ class Controleur
 						if ($password == null)
 						{
 							$message = "Email Invalide";
+							var_dump("email INVALIDE");
 						} else {
 
 						//Envoi de l'email
 						if (mail($mail,"Envoi de votre de Mot de Passe","Voici votre mot de passe : \n\n".$password, "From: Video&Co"))
-				    	$message = "L'email a été envoyé.";
+				    	//$message = "L'email a été envoyé.";
+							var_dump('ah');
+						else
+							var_dump($mail);
 						}
 						//Message accomplissant de l'envoi positivement ou négativement de l'email
-						$this->redirection("",$message);
+						//$this->redirection("",$message,5);
 					}
 					break;
 				}
@@ -333,10 +347,11 @@ class Controleur
 								}
 
 
-								$retour = $retour.'</div>';
+								$retour = "";
+
+								$this->redirection("?vue=videotheque&action=fiche&id=".$_GET['id'],$retour);
 						}
 
-						$this->redirection("",$retour);
 						break;
 
 					case "supprimer":
@@ -357,10 +372,10 @@ class Controleur
 									}
 
 
-									$retour = $retour.'</div>';
-							}
-							$this->redirection("",$retour,3);
+									$retour = "";
 
+									$this->redirection("?vue=videotheque&action=fiche&id=".$_GET['id'],$retour);
+							}
 							break;
 			}
 		}
@@ -387,7 +402,7 @@ class Controleur
 					if($_GET['id']) {
 
 							$idClient = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getIdClient();
-							$resultat = $this->maVideotheque->ajouteUnEmprunt(date("Y-m-d"),$idClient,$_GET['id']);
+							$resultat = $this->maVideotheque->ajouteUnEmprunt(date("Y-m-d"),$idClient,$_GET['id'],1)	;
 
 							$retour = $retour.'<div class="test" style="color: white;">';
 							if(isset($resultat))
@@ -401,10 +416,12 @@ class Controleur
 							}
 
 
-							$retour = $retour.'</div>';
+							$retour = "";
+
+
+							$this->redirection("?vue=videotheque&action=fiche&id=".$_GET['id'],$retour);
 					}
 
-					$this->redirection("",$retour);
 					break;
 
 				case "supprimer":
@@ -426,10 +443,11 @@ class Controleur
 								}
 
 
-								$retour = $retour.'</div>';
+								$retour = "";
+
+								$this->redirection("?vue=videotheque&action=fiche&id=".$_GET['id'],$retour);
 						}
 
-						$this->redirection("",$retour,3);
 						break;
 
 			}
@@ -550,7 +568,7 @@ class Controleur
 							}
 
 							if($this->maVideotheque->supprimerUnEmprunt($idClient,$id)) {
-								$retour = $retour.'<button type="submit" class="btn btn-success btn-default"><span class="fas fa-power-off"></span>
+								$retour = $retour.'<button type="submit" class="btn btn-danger btn-default"><span class="fas fa-power-off"></span>
 								<a style="text-decoration:none;color:white;" href="index.php?vue='.$support.'&action=supprimer&id='.$_GET['id'].'"> Supprimer </a> </button> </div> </div>';
 						  } else {
 								$retour = $retour.'<button type="submit" class="btn btn-success btn-default"><span class="fas fa-power-off"></span>

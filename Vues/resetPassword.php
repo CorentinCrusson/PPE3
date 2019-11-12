@@ -1,5 +1,5 @@
 <div class="centrePage">
-<FORM action = 'index.php?vue=compte&action=passwdMissed' method = 'post'>
+<FORM action = 'index.php?vue=compte&action=passwdMissed' style="color: white;" method = 'post'>
 	<TABLE>
 		<TR>
 			<TD>

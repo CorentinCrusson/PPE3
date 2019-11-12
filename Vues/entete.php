@@ -5,6 +5,7 @@
 		</title>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 		<link rel="stylesheet" href="./css/stylevideo.css" type="text/css"/>
+		<link rel="stylesheet" href="./css/profilUser.css" type="text/css"/>
 		<link rel="stylesheet" href="./css/carousel.css" type="text/css"/>
 		<link rel="stylesheet" href="./css/bootstrap.min.css" type="text/css"/>
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap-grid.css" rel="stylesheet" />

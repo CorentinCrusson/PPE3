@@ -45,12 +45,13 @@ Class conteneurGenre
 		//METHODE RETOURNANT LA LISTE DES genres DANS UNE BALISE <SELECT>------------------------------------------------------------------
 	public function lesGenresAuFormatHTML()
 		{
-		$liste = "<SELECT name = 'idGenre'>";
+			$liste ='<li><a href="index.php?vue=videotheque&action=aleatoire">Aléatoire</a></li>';
+			$nb = 1;
 		foreach ($this->lesGenres as $unGenre)
 			{
-			$liste = $liste."<OPTION value='".$unGenre->getIdGenre()."'>".$unGenre->getLibelleGenre()."</OPTION>";
+				$liste = $liste.'<li><a href="index.php?vue=videotheque&action=aleatoire&genre='.$nb.'">'.$unGenre->getLibelleGenre().'</a></li>';
+				$nb++;
 			}
-		$liste = $liste."</SELECT>";
 		return $liste;
 		}
 

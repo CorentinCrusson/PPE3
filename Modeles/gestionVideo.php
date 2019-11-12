@@ -294,7 +294,7 @@ Class gestionVideo
 	//METHODE SUPPRIMANT UN EMPRUNT--------------------------------------------------------------------------------------------------------
 	public function supprimerUnEmprunt($unIdClient, $unIdSupport)
 		{
-			$requete = $this->maBD->supprimerEmprunt($unIdClient, $unIdSupport);
+			$requete = $this->maBD->supprimerEmprunt($unIdClient, $unIdSupport,$action=true);
 
 			return $requete;
 		}

@@ -20,8 +20,7 @@
                 <ul class="dropdown">
                     <button class="btn btn-secondary ml-auto dropdown-toggle" type="button" data-toggle="dropdown"><a href="index.php?vue=videotheque&action=aleatoire" style="text-decoration:none;color:white;" >Support Aléatoire</a></button>
                     <ul class="dropdown-menu">
-                        <li><a href="index.php?vue=videotheque&action=aleatoire">Aléatoire</a></li>
-                        <li><a href="index.php?vue=videotheque&action=aleatoire&genre=4">Policier</a></li>
+                      <?php echo $_SESSION['lesGenres']; ?>
                     </ul>
                 </ul>
             </li>
