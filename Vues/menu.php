@@ -1,5 +1,5 @@
 ﻿<div class="navbar-collapse collapse w-100" id="navbar3">
-        <ul class="navbar-nav w-100">
+        <ul class="navbar-nav w-150">
             <li class="nav-item active">
                 <ul class="dropdown spec-bot">
                     <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">Les Films<span class="caret"></span></button>
@@ -33,7 +33,12 @@
         <div>
          <div id="result-search"></div> <!-- C'est ici que nous aurons nos résultats de notre recherche -->
        <!--</div> -->
-
+       <div class="form-group form-inline my-2 my-lg-0">
+         <input class="form-control mr-sm-2" id="search-video" type="text" placeholder="Search">
+       </div>
+       <div>
+        <div id="result-search"></div> <!-- C'est ici que nous aurons nos résultats de notre recherche -->
+       </div>
 
         <ul class="nav navbar-nav ml-auto pos-a'vatar justify-content-end">
 

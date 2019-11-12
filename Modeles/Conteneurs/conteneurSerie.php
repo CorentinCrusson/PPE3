@@ -29,21 +29,20 @@ Class conteneurSerie
 	//METHODE RETOURNANT LA LISTE DES  series-----------------------------------------------------------------------------------------
 	public function listeDesSeries($retour)
 		{
-		$liste = '<div class="slide blur colonne">';
+		$liste = '<div class="conteneur">';
 		$nb=0;
 		foreach ($this->lesSeries as $uneSerie)
 			{
 				$row = $retour->fetch(PDO::FETCH_OBJ);
+				if(empty($row))
+				{
+					break;
+				}
 				$id = $row->idSupport;
 
-				$liste = $liste.'<div> <div> <a href="index.php?vue=videotheque&action=fiche&id='.$id.' "	> <img id='.$id.' src=./Images/'.$row->image.'
-				title="'.$uneSerie->getTitreSerie().'"/> </a> <p style="color:white;">'.$uneSerie->getTitreSerie().' </p> </div> </div>';
-				$nb++;
-
-				if($nb%3==0)
-				{
-					$liste = $liste.'</div> <div class="slide blur colonne">';
-				}
+				$liste = $liste.'<div class="element"> <a href="index.php?vue=videotheque&action=fiche&id='.$id.' "	> <img id='.$id.' src=./Images/'.$row->image.'
+				title="'.$uneSerie->getTitreSerie().'"/> </a> <p style="color:white;">'.$uneSerie->getTitreSerie().' </p> </div>';
+				
 
 			}
 			$liste = $liste.'</div>';

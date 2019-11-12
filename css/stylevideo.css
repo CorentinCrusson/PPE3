@@ -1,4 +1,8 @@
-﻿.spec-bot
+:root {
+  --main-bg-color: #211F1E;
+}
+
+.spec-bot
 {
     margin-bottom: 1rem !important;
 }
@@ -19,7 +23,7 @@
 body
 {
    margin-top: -24px !important;
-   background-color: #000000 !important;
+   background-color: var(--main-bg-color) !important;
 }
 
 .avatar
@@ -84,4 +88,39 @@ body
 {
   position: absolute;
   padding: 20%;
+}
+
+/* FLEX BOX */
+
+.conteneur {
+  color: white;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.element {
+  padding: 3%;
+}
+
+.p {
+  display: block;
+}
+
+input[type=text],input[type=password] {
+  width: 200px;
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+}
+
+/* When the input field gets focus, change its width to 100% */
+input[type=text]:focus,input[type=password]:focus {
+  width: 100%;
+}
+
+.searchResult
+{
+  position: absolute;
+  top: 200%;
+  left: 5%;
 }

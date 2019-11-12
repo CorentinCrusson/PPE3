@@ -377,18 +377,22 @@ class accesBD
 
 
 		//Donne Image Séries
-		public function donneImageSerie()
+		public function donneImageSerie($idGenre)
 		{
 			$liste = '';
-			$requete = $this->conn->prepare("SELECT image,s.idSupport FROM SUPPORT s, SERIE se WHERE se.idSupport = s.idSupport GROUP BY se.idSerie");
+			$requete = $this->conn->prepare("SELECT image,s.idSupport FROM SUPPORT s, SERIE se WHERE se.idSupport = s.idSupport AND s.idGenre LIKE ? GROUP BY se.idSerie");
+			$requete->bindValue(1,$idGenre.'%');
+
 			$requete->execute();
 			return $requete;
 		}
 
-		public function donneImageFilm()
+		public function donneImageFilm($idGenre)
 		{
 			$liste = '';
-			$requete = $this->conn->prepare("SELECT image,s.idSupport FROM SUPPORT s, FILM f WHERE f.idSupport = s.idSupport GROUP BY f.idFilm");
+			$requete = $this->conn->prepare("SELECT image,s.idSupport FROM SUPPORT s, FILM f WHERE f.idSupport = s.idSupport AND s.idGenre LIKE ? GROUP BY f.idFilm");
+			$requete->bindValue(1,$idGenre.'%');
+
 			$requete->execute();
 			return $requete;
 		}
@@ -405,6 +409,16 @@ class accesBD
 			return $requete;
 		}
 
+		public function donneImagesGenre($idGenre='%')
+		{
+
+			$requete = $this->conn->prepare("SELECT s.image,s.idGenre,s.idSupport FROM support s WHERE s.idGenre LIKE ? GROUP BY s.idGenre");
+			$requete->bindValue(1,$idGenre);
+
+			$requete->execute();
+
+			return $requete;
+		}
 
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 		//----------------------------- RETOURNER L IMAGE VIDEO - RESEARCH BAR ---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -412,11 +426,27 @@ class accesBD
 
 
 		//PROCEDURE pour recuperer les informations de la vidéo mis en barre de recherche
-		public function retournerInfosRecherche($video)
+		public function retournerInfosRecherche($video,$typeSupport)
 		{
-				$requete = $this->conn->prepare("SELECT idSupport,titreSupport,image FROM support WHERE titreSupport LIKE ?	LIMIT 10;");
+			//Recherche en fonction du Type du Support = > Serie / Film / Emprunt / ...
+				switch($typeSupport)
+				{
+					case 'serie':
+						$requete = $this->conn->prepare("SELECT s.idSupport,titreSupport,image FROM support s,serie se WHERE se.idSupport = s.idSupport AND titreSupport LIKE ?	LIMIT 10;");
+						$requete->bindValue(1,$video.'%');
+						break;
 
-				$requete->bindValue(1,$video.'%');
+					case 'film':
+						$requete = $this->conn->prepare("SELECT s.idSupport,titreSupport,image FROM support s,film f WHERE f.idSupport = s.idSupport AND titreSupport LIKE ?	LIMIT 10;");
+						$requete->bindValue(1,$video.'%');
+						break;
+					default:
+							$requete = $this->conn->prepare("SELECT idSupport,titreSupport,image FROM support WHERE titreSupport LIKE ?	LIMIT 10;");
+							$requete->bindValue(1,$video.'%');
+							break;
+
+				}
+
 				$requete->execute();
 
 				$requete = $requete->fetchAll();
