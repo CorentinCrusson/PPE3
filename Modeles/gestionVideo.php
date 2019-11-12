@@ -359,21 +359,22 @@ Class gestionVideo
 		{
 		return $this->tousLesClients->listeDesClients($login);
 		}
-	public function listeLesFilms()
+	public function listeLesFilms($idGenre='')
 		{
-			$retour = $this->maBD->donneImageFilm();
+			$retour = $this->maBD->donneImageFilm($idGenre);
 			$liste = $this->tousLesFilms->listeDesFilms($retour);
 			return $liste;
 		}
-	public function listeLesSeries()
+	public function listeLesSeries($idGenre='')
 		{
-			$retour = $this->maBD->donneImageSerie();
+			$retour = $this->maBD->donneImageSerie($idGenre);
 			$liste = $this->toutesLesSeries->listeDesSeries($retour);
 			return $liste;
 		}
 	public function listeLesGenres()
 		{
-		return $this->tousLesGenres->listeDesGenres();
+			$imageGenre = $this->maBD->donneImagesGenre();
+			return $this->tousLesGenres->listeDesGenres($imageGenre);
 		}
 	public function listeLesSaisons()
 		{
@@ -426,7 +427,7 @@ Class gestionVideo
 			if($type=="film")
 			{
 				$rep = $this->maBD->retournerInfosFilm($id);
-			} else {
+			} else if($type=="serie"){
 				$rep =  $this->maBD->retournerInfosSerie($id);
 			}
 

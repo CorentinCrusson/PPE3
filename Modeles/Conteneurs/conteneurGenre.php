@@ -27,18 +27,16 @@ Class conteneurGenre
 		}
 
 	//METHODE RETOURNANT LA LISTE DES Genres-----------------------------------------------------------------------------------------
-	public function listeDesGenres()
+	public function listeDesGenres($listeImageGenre)
 		{
 		$liste = "<div class='container h-100'>
                     <div class='row h-100 justify-content-center align-items-center'>
                         <table class='table w-50'>
-                            <thead>
-                                <td class='head-table-genre text-white'>Identifiant genre</td>
-                                <td class='head-table-genre text-white'>Genre</td>
-                            </thead>
                             <tbody>";
 		foreach ($this->lesGenres as $unGenre)
-			{	$liste = $liste.'<tr><td class="text-white td-table">'.$unGenre->getIdGenre().'</td><td class="text-white td-table">'.$unGenre->getLibelleGenre().'</td></tr>';
+			{
+				$row = $listeImageGenre->fetch(PDO::FETCH_OBJ);
+				$liste = $liste.'<tr><td class="text-white td-table"> <a href="index.php?vue=videotheque&action=visualiserGenre&idGenre='.$row->idGenre.' "	> <img src="./Images/'.$row->image.'" /> </a> </td><td class="text-white td-table">'.$unGenre->getLibelleGenre().'</td></tr>';
 			}
 			$liste=$liste."</tbody></table></div></div>";
 		return $liste;

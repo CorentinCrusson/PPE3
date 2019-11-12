@@ -264,9 +264,11 @@ class Controleur
 				$_SESSION['nom'] = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getNomClient();
 				$_SESSION['prenom'] = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getPrenomClient();
 				require 'Vues/menu.php';
-				require 'Vues/searchBar.php';
+				//require 'Vues/searchBar.php';
 
-				//TEST API1234
+
+
+				/*TEST API1234
 				$code = 27061;
 		 		$profile = 'small';
 				try
@@ -278,7 +280,7 @@ class Controleur
 		        echo "Titre du film: ", $movie->title, PHP_EOL;
 
 		        // Afficher toutes les données
-		        print_r($movie->getArray());*/
+		        print_r($movie->getArray());
 
 		    }
 		    catch( ErrorException $error )
@@ -286,7 +288,8 @@ class Controleur
 		        // En cas d'erreur
 		        echo "Erreur n°", $error->getCode(), ": ", $error->getMessage(), PHP_EOL;
 		    }
-				//echo $this->maVideotheque->listeLesFilms();
+				*/
+ 				echo '<div id="displaySupport"'.$this->maVideotheque->listeLesGenres().'</div>';
 				break;
 		}
 
@@ -304,7 +307,7 @@ class Controleur
 
 				//CAS visualisation de tous les films-------------------------------------------------------------------------------------------------
 				case "visualiser" :
-					require 'Vues/searchBar.php';
+					//require 'Vues/searchBar.php';
 					//ici il faut pouvoir visualiser l'ensemble des films
 					$affichage = $this->maVideotheque->listeLesFilms();
 					echo '<div id="displaySupport" style="visibility=visible">'.$affichage.'</div>';
@@ -373,7 +376,7 @@ class Controleur
 
 			//CAS visualisation de toutes les Series-------------------------------------------------------------------------------------------------
 			case "visualiser" :
-				require 'Vues/searchBar.php';
+				//require 'Vues/searchBar.php';
 				//ici il faut pouvoir visualiser l'ensemble des Séries
 				$affichage = $this->maVideotheque->listeLesSeries();
 				echo '<div id="displaySupport">'.$affichage.'</div>';
@@ -484,29 +487,37 @@ class Controleur
 						$support ="film";
 						$empty = true;
 
+						$idClient = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getIdClient();
 						$resultat = $this->maVideotheque->retournerInfosSupport($id,$support);
 
 						if(isset($resultat))
 						{
 							// résultats
-							$retour = $retour.'<div class="test" style="color: white;">';
+							$retour = $retour.'<div class="conteneur" style="padding-left: 10%; padding-top: 2%; color: white;">';
 
 							while($donnees = $resultat->fetch(PDO::FETCH_OBJ)) {
 								// je remplis un tableau et mettant le nom de la ville en index pour garder le tri
-									$retour = $retour.'<h2> Titre </h2>
-									<p id="titre">'.$donnees->titreSupport.'</p>
+									$retour = $retour.'
+									<div class="element">
+										<img src="./Images/'.$donnees->image.'" />
+									</div>
 
-									<h2> Réalisateur </h2>
-									<p id="realisateur">'.$donnees->realisateur.'</p>
+									<div class="element">
+										<h2> Titre </h2>
+										<p id="titre">'.$donnees->titreSupport.'</p>
 
-									<h2> Resumé </h2>
-									<p id="resume">Null</p>
+										<h2> Réalisateur </h2>
+										<p id="realisateur">'.$donnees->realisateur.'</p>
 
-									<h2> Durée </h2>
-									<p id="duree">'.$donnees->duree.'</p>
+										<h2> Resumé </h2>
+										<p id="resume">Null</p>
 
-									<h2> Genre </h2>
-									<p id="genre">'.$donnees->libelleGenre.'</p>';
+										<h2> Durée </h2>
+										<p id="duree">'.$donnees->duree.'</p>
+
+										<h2> Genre </h2>
+										<p id="genre">'.$donnees->libelleGenre.'</p>
+									';
 									$empty = false;
 							}
 
@@ -515,25 +526,37 @@ class Controleur
 								$resultat = $this->maVideotheque->retournerInfosSupport($id,$support);
 									while($donnees = $resultat->fetch(PDO::FETCH_OBJ)) {
 										// je remplis un tableau et mettant le nom de la ville en index pour garder le tri
-											$retour = $retour.'<h2> Titre </h2>
-											<p id="titre">'.$donnees->titreSupport.'</p>
+											$retour = $retour.'
+												<div class="element">
+													<img src="./Images/'.$donnees->image.'" />
+												</div>
 
-											<h2> Réalisateur </h2>
-											<p id="realisateur">'.$donnees->realisateur.'</p>
+											<div class="element">
+												<h2> Titre </h2>
+												<p id="titre">'.$donnees->titreSupport.'</p>
 
-											<h2> Resumé </h2>
-											<p id="resume">'.$donnees->resumeSerie.'</p>
+												<h2> Réalisateur </h2>
+												<p id="realisateur">'.$donnees->realisateur.'</p>
 
-											<h2> Durée </h2>
-											<p id="duree">Null</p>
+												<h2> Resumé </h2>
+												<p id="resume">'.$donnees->resumeSerie.'</p>
 
-											<h2> Genre </h2>
-											<p id="genre">'.$donnees->libelleGenre.'</p>';
+												<h2> Durée </h2>
+												<p id="duree">Null</p>
+
+												<h2> Genre </h2>
+												<p id="genre">'.$donnees->libelleGenre.'</p>';
 									}
 							}
 
-						$retour = $retour.'<a href="index.php?vue='.$support.'&action=emprunter&id='.$_GET['id'].'"> Emprunter </a>';
-						$retour = $retour.'<a href="index.php?vue='.$support.'&action=supprimer&id='.$_GET['id'].'"> Supprimer </a> </div> ';
+							if($this->maVideotheque->supprimerUnEmprunt($idClient,$id)) {
+								$retour = $retour.'<button type="submit" class="btn btn-success btn-default"><span class="fas fa-power-off"></span>
+								<a style="text-decoration:none;color:white;" href="index.php?vue='.$support.'&action=supprimer&id='.$_GET['id'].'"> Supprimer </a> </button> </div> </div>';
+						  } else {
+								$retour = $retour.'<button type="submit" class="btn btn-success btn-default"><span class="fas fa-power-off"></span>
+								<a style="text-decoration:none;color:white;" href="index.php?vue='.$support.'&action=emprunter&id='.$_GET['id'].'"> Emprunter </a> </button> </div> </div>';
+							}
+							$retour = $retour.'</div>';
 						}
 
 					}
@@ -541,8 +564,18 @@ class Controleur
 				echo $retour;
 				break;
 
+				case "visualiserGenre":
+					$idGenre = $_GET['idGenre'];
+					echo $this->maVideotheque->listeLesFilms($idGenre);
+					echo $this->maVideotheque->listeLesSeries($idGenre);
+					break;
+
 				case "aleatoire":
-					$id = $this->maVideotheque->retourneAleaSupport(rand(1,$this->maVideotheque->donneNbGenres()));
+					if(isset($_GET['genre'])) {
+						$id = $this->maVideotheque->retourneAleaSupport($_GET['genre']);
+					} else {
+						$id = $this->maVideotheque->retourneAleaSupport(rand(1,$this->maVideotheque->donneNbGenres()));
+					}
 					$page = '?vue=videotheque&action=fiche&id='.$id;
 					$this->redirection($page,"",0);
 					break;
