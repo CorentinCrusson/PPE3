@@ -29,7 +29,7 @@ Class conteneurSerie
 	//METHODE RETOURNANT LA LISTE DES  series-----------------------------------------------------------------------------------------
 	public function listeDesSeries($retour)
 		{
-		$liste = '<div class="conteneur">';
+		$liste = '<div class="conteneur col-lg-3 col-md-4 col-sm-6 col-xs-12">';
 		$nb=0;
 		foreach ($this->lesSeries as $uneSerie)
 			{
@@ -40,9 +40,12 @@ Class conteneurSerie
 				}
 				$id = $row->idSupport;
 
-				$liste = $liste.'<div class="element"> <a href="index.php?vue=videotheque&action=fiche&id='.$id.' "	> <img id='.$id.' src=./Images/'.$row->image.'
-				title="'.$uneSerie->getTitreSerie().'"/> </a> <p style="color:white;">'.$uneSerie->getTitreSerie().' </p> </div>';
-				
+				$liste = $liste.'<div class="element hovereffect col-lg-3 col-md-4 col-sm-6 col-xs-12">  <img id='.$id.' src=./Images/'.$row->image.'
+				title="'.$uneSerie->getTitreSerie().'" class="img-responsive" /> </a>
+				<div class="overlay">
+          <h2>'.$uneSerie->getTitreSerie().'</h2>
+						<a class="info" href="index.php?vue=videotheque&action=fiche&id='.$id.' "	> Appuyer Ici </a>
+				</div></div>';
 
 			}
 			$liste = $liste.'</div>';

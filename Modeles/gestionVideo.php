@@ -354,6 +354,11 @@ Class gestionVideo
 		 return $this->tousLesSupports;
 	 }
 
+	 public function donneNomGenreDepuisId($id)
+	 {
+		 return $this->tousLesGenres->donneNomGenreDepuisId($id);
+	 }
+
 	//METHODE RETOURNANT LA LISTE DES differents elements-------------------------------------------------------------------------------------------------------
 	public function listeLesClients($login)
 		{
@@ -420,7 +425,7 @@ Class gestionVideo
 		{
 		return $this->tousLesEpisodes->lesEpisodesAuFormatHTML();
 		}
-		
+
 		//Methode retournant les informations des clients
 		public function recupInfosClient ($idClient)
 		{

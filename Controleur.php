@@ -113,7 +113,7 @@ class Controleur
 			case 'visualiser' :
 				//ici il faut pouvoir avoir accès au information de l'internaute connecté
 				$this->afficheMenu();
-				
+
 				//ici il faut pouvoir avoir accès au information de l'internaute connecté
 				$idClient = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getIdClient();
 				$_SESSION['leClient'] = $this->maVideotheque->recupInfosClient($idClient);
@@ -589,6 +589,8 @@ class Controleur
 
 				case "visualiserGenre":
 					$idGenre = $_GET['idGenre'];
+					$nomGenre = $this->maVideotheque->donneNomGenreDepuisId($idGenre);
+					echo "<h1 style='color:white;'> Résultat du Genre : ".$nomGenre."</h1>";
 					echo $this->maVideotheque->listeLesFilms($idGenre);
 					echo $this->maVideotheque->listeLesSeries($idGenre);
 					break;
