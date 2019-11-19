@@ -97,6 +97,7 @@ body
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
+  box-sizing: content-box;
 }
 
 .element {

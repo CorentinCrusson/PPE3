@@ -294,7 +294,7 @@ Class gestionVideo
 	//METHODE SUPPRIMANT UN EMPRUNT--------------------------------------------------------------------------------------------------------
 	public function supprimerUnEmprunt($unIdClient, $unIdSupport)
 		{
-			$requete = $this->maBD->supprimerEmprunt($unIdClient, $unIdSupport);
+			$requete = $this->maBD->supprimerEmprunt($unIdClient, $unIdSupport,$action=true);
 
 			return $requete;
 		}
@@ -420,7 +420,18 @@ Class gestionVideo
 		{
 		return $this->tousLesEpisodes->lesEpisodesAuFormatHTML();
 		}
+		
+		//Methode retournant les informations des clients
+		public function recupInfosClient ($idClient)
+		{
+			$resultat = $this->maBD->recupInfosClient($idClient);
 
+			$tab = array();
+
+			$tab = $resultat->fetch(PDO::FETCH_BOTH);
+
+			return $tab;
+		}
 		//METHODE RETOURNANT LES CONTENUS DRE Supports
 		public function retournerInfosSupport($id,$type)
 		{
