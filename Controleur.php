@@ -113,6 +113,11 @@ class Controleur
 			case 'visualiser' :
 				//ici il faut pouvoir avoir accès au information de l'internaute connecté
 				$this->afficheMenu();
+				
+				//ici il faut pouvoir avoir accès au information de l'internaute connecté
+				$idClient = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getIdClient();
+				$_SESSION['leClient'] = $this->maVideotheque->recupInfosClient($idClient);
+
 				require 'Vues/profil.php';
 				break;
 
