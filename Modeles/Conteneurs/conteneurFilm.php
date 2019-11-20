@@ -29,7 +29,7 @@ Class conteneurFilm
 	//METHODE RETOURNANT LA LISTE DES  films-----------------------------------------------------------------------------------------
 	public function listeDesFilms($retour)
 		{
-			$liste = '<div class="conteneur col-lg-3 col-md-4 col-sm-6 col-xs-12">';
+			$liste = '<div class="conteneur ">';
 			$nb=0;
 			foreach ($this->lesFilms as $unFilm)
 				{

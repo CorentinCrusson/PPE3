@@ -34,7 +34,12 @@ Class conteneurGenre
 		foreach ($this->lesGenres as $unGenre)
 			{
 				$row = $listeImageGenre->fetch(PDO::FETCH_OBJ);
-				$liste = $liste.'<div class="element">  <a href="index.php?vue=videotheque&action=visualiserGenre&idGenre='.$row->idGenre.' "	> <img src="./Images/'.$row->image.'" /> </a> <p style="color:white;">'.$unGenre->getLibelleGenre().'</p> </div>';
+				$liste = $liste.'<div class="element hovereffect col-lg-3 col-md-4 col-sm-6 col-xs-12"> <a href="index.php?vue=videotheque&action=fiche&id='.$row->idGenre.' "	> <img id='.$row->idGenre.' src=./Images/'.$row->image.'
+				 title="'.$unGenre->getLibelleGenre().'" class="img-responsive" /> </a>
+				 <div class="overlay">
+					 <h2>'.$unGenre->getLibelleGenre().'</h2>
+						<a class="info" href="index.php?vue=videotheque&action=fiche&id='.$row->idGenre.' "	> Voir les Supports </a>
+				</div> </div>';
 			}
 			$liste=$liste."</div>";
 		return $liste;
