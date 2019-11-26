@@ -9,16 +9,13 @@
                 </ul>
             </li>
             <li class="nav-item active">
-                <ul class="dropdown">
-                    <button class="btn btn-secondary ml-auto dropdown-toggle" type="button" data-toggle="dropdown">Les Séries<span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li><a href="index.php?vue=serie&action=visualiser">Voir toutes les séries</a></li>
-                    </ul>
-                </ul>
+                      <button href="index.php?vue=serie&action=visualiser" class="btn btn-secondary ml-auto dropdown-toggle" type="button" data-toggle="dropdown">
+
+                                <a href="index.php?vue=serie&action=visualiser"> Les Séries </a> <span class="caret"></span></button>
             </li>
             <li class="nav-item active">
                 <ul class="dropdown">
-                    <button class="btn btn-secondary ml-auto dropdown-toggle" type="button" data-toggle="dropdown"><a href="index.php?vue=videotheque&action=aleatoire" style="text-decoration:none;color:white;" >Support Aléatoire</a></button>
+                    <button class="btn btn-secondary ml-auto dropdown-toggle" type="button" data-toggle="dropdown"><a href="index.php?vue=videotheque&action=aleatoire" style="text-decoration:none;color:white;" >Recherche Aléatoire</a></button>
                     <ul class="dropdown-menu">
                       <?php echo $_SESSION['lesGenres']; ?>
                     </ul>
@@ -33,7 +30,7 @@
          <div id="result-search"></div> <!-- C'est ici que nous aurons nos résultats de notre recherche -->
        <!--</div> -->
        <div class="form-group form-inline my-2 my-lg-0">
-         <input class="form-control mr-sm-2" id="search-video" type="text" placeholder="Search">
+         <input class="form-control mr-sm-2" id="search-video" type="text" placeholder="Recherchez vos Film/Serie">
        </div>
        <div>
         <div id="result-search"></div> <!-- C'est ici que nous aurons nos résultats de notre recherche -->
