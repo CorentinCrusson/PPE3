@@ -284,31 +284,8 @@ class Controleur
 				$_SESSION['prenom'] = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getPrenomClient();
 				require 'Vues/menu.php';
 				//require 'Vues/searchBar.php';
+				echo '<div id="displaySupport>"'.$this->maVideotheque->listeLesGenres().'</div>';
 
-
-
-				/*TEST API1234
-				$code = 27061;
-		 		$profile = 'small';
-				try
-		    {
-		        /* -*9Envoi de la requête
-		        $movie = $this->helper->movie($code, $profile );
-
-		        // Afficher le titre
-		        echo "Titre du film: ", $movie->title, PHP_EOL;
-
-		        // Afficher toutes les données
-		        print_r($movie->getArray());
-
-		    }
-		    catch( ErrorException $error )
-		    {
-		        // En cas d'erreur
-		        echo "Erreur n°", $error->getCode(), ": ", $error->getMessage(), PHP_EOL;
-		    }
-				*/
- 				echo '<div id="displaySupport"'.$this->maVideotheque->listeLesGenres().'</div>';
 				break;
 		}
 
@@ -510,6 +487,13 @@ class Controleur
 						$support ="film";
 						$empty = true;
 
+						if(isset($_SESSION['genre'])) {
+							$nomGenre = $this->maVideotheque->donneNomGenreDepuisId($_SESSION['genre']);
+							echo "<h1 style='color:white;'> Support du Genre : ".$nomGenre."</h1>";
+							unset($_SESSION['genre']);
+						} else {
+							echo "<h1 style='color:white;'> Fiche du Support </h1>";
+						}
 						$idClient = $this->maVideotheque->getLesClients()->donneObjetClientDepuisLogin($_SESSION['login'])->getIdClient();
 						$resultat = $this->maVideotheque->retournerInfosSupport($id,$support);
 
@@ -564,8 +548,8 @@ class Controleur
 												<h2> Resumé </h2>
 												<p id="resume">'.$donnees->resumeSerie.'</p>
 
-												<h2> Durée </h2>
-												<p id="duree">Null</p>
+												<h2> Durée Moyenne d\'un Épisode </h2>
+												<p id="duree">'.$donnees->duree.' minutes </p>
 
 												<h2> Genre </h2>
 												<p id="genre">'.$donnees->libelleGenre.'</p>';

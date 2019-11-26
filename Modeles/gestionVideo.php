@@ -161,6 +161,31 @@ Class gestionVideo
 
 		}
 
+		private function updateResume()
+		{
+			//;
+			//TEST API1234
+			$code = 27061;
+			$profile = 'small';
+			try
+			{
+					//Envoi de la requête
+					$movie = $this->helper->movie($code, $profile );
+
+					// Afficher le titre
+					echo "Titre du film: ", $movie->title, PHP_EOL;
+
+					// Afficher toutes les données
+					print_r($movie->getArray());
+
+			}
+			catch( ErrorException $error )
+			{
+					// En cas d'erreur
+					echo "Erreur n°", $error->getCode(), ": ", $error->getMessage(), PHP_EOL;
+			}
+		}
+
 /*METHODE AFFICHANT FILM/SERIES
 		public function recupererFilmsSeries($video)
 		{
@@ -437,7 +462,7 @@ Class gestionVideo
 
 			return $tab;
 		}
-		//METHODE RETOURNANT LES CONTENUS DRE Supports
+		//METHODE RETOURNANT Les informations de Supports lors du clic "En détail"
 		public function retournerInfosSupport($id,$type)
 		{
 			if($type=="film")
@@ -461,6 +486,8 @@ Class gestionVideo
 
 				array_push($supports,$donnees->idSupport);
 			}
+
+			$_SESSION['genre'] = $idGenre;
 
 			$id = $supports[ rand( 0,count($supports)-1 ) ];
 			return $id;

@@ -41,10 +41,10 @@ Class conteneurFilm
 					$id = $row->idSupport;
 
 					$liste = $liste.'<div class="element hovereffect col-lg-3 col-md-4 col-sm-6 col-xs-12"> <a href="index.php?vue=videotheque&action=fiche&id='.$id.' "	> <img id='.$id.' src=./Images/'.$row->image.'
-					 title="'.$unFilm->getTitreFilm().'" class="img-responsive" /> </a>
+					 title="'.$unFilm->getTitreFilm().'" class="img-responsive border border-dark rounded" /> </a>
 					 <div class="overlay">
 	           <h2>'.$unFilm->getTitreFilm().'</h2>
-	 						<a class="info" href="index.php?vue=videotheque&action=fiche&id='.$id.' "	> Appuyer Ici </a>
+	 						<a class="info" href="index.php?vue=videotheque&action=fiche&id='.$id.' "	> Voir en Détail </a>
 	 				</div> </div>';
 
 				}

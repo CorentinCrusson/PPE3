@@ -371,6 +371,12 @@ class accesBD
 			return $stringQuery.";";
 		}
 
+		//---UPDATES RESUMES--//
+		public function updateResume($resume)
+		{
+
+		}
+
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 		//-----------------------------DONNE IMAGES ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -482,7 +488,7 @@ class accesBD
 
 		}*/
 
-
+		/* Retourne Informations lors d'un Clic "En détail" sur un film ou une série */
 		public function retournerInfosFilm($idSupport)
 		{
 			$requete = $this->conn->prepare("SELECT image,titreSupport,realisateur,libelleGenre,duree FROM support,genre,film WHERE film.idSupport=support.idSupport AND support.idGenre = genre.idGenre AND support.idSupport = ? LIMIT 1");
@@ -501,12 +507,13 @@ class accesBD
 
 		public function retournerInfosSerie($idSupport)
 		{
-			$requete = $this->conn->prepare("SELECT image,titreSupport,realisateur,libelleGenre,resumeSerie FROM support,genre,serie WHERE serie.idSupport=support.idSupport AND support.idGenre = genre.idGenre AND support.idSupport = ? LIMIT 1");
+			$requete = $this->conn->prepare("SELECT image,titreSupport,realisateur,libelleGenre,resumeSerie,ROUND(AVG(ep.duree)) AS 'duree' FROM support,genre,serie,episode ep WHERE serie.idSupport=support.idSupport AND support.idGenre = genre.idGenre AND support.idSupport = ? LIMIT 1");
 
 			$requete->bindValue(1,$idSupport);
 			$requete->execute();
 
 			if($requete) {
+				// var_dump($requete->fetch(PDO::FETCH_OBJ));
 				return $requete;
 			}
 
@@ -529,6 +536,10 @@ class accesBD
 
 			return null;
 		}
+
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		//----------------------------- RETOURNE Informations d'un Client ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------------------------------------------------------------------------
 
 		public function recupInfosClient($idClient)
 		{
