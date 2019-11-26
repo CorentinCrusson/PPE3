@@ -22,6 +22,7 @@
 
 	</head>
 	<body>
+		 <div class=global>
 
 
         <nav class="navbar navbar-dark navbar-expand-md bg-faded justify-content-center">

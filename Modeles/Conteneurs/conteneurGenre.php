@@ -34,11 +34,11 @@ Class conteneurGenre
 		foreach ($this->lesGenres as $unGenre)
 			{
 				$row = $listeImageGenre->fetch(PDO::FETCH_OBJ);
-				$liste = $liste.'<div class="element hovereffect col-lg-3 col-md-4 col-sm-6 col-xs-12"> <a href="index.php?vue=videotheque&action=fiche&id='.$row->idGenre.' "	> <img id='.$row->idGenre.' src=./Images/'.$row->image.'
-				 title="'.$unGenre->getLibelleGenre().'" class="img-responsive" /> </a>
+				$liste = $liste.'<div class="element hovereffect col-lg-3 col-md-4 col-sm-6 col-xs-12"> <a href="index.php?vue=videotheque&action=fiche&id='.$row->idGenre.' "	>
+				<img id='.$row->idGenre.' src=./Images/'.$row->image.' class="img-reponsive border border-dark rounded " title="'.$unGenre->getLibelleGenre().'" /> </a>
 				 <div class="overlay">
 					 <h2>'.$unGenre->getLibelleGenre().'</h2>
-						<a class="info" href="index.php?vue=videotheque&action=fiche&id='.$row->idGenre.' "	> Voir les Supports </a>
+						<a class="info" href="index.php?vue=videotheque&action=visualiserGenre&idGenre='.$row->idGenre.' "	> Voir les Supports </a>
 				</div> </div>';
 			}
 			$liste=$liste."</div>";
@@ -48,7 +48,7 @@ Class conteneurGenre
 		//METHODE RETOURNANT LA LISTE DES genres DANS UNE BALISE <SELECT>------------------------------------------------------------------
 	public function lesGenresAuFormatHTML()
 		{
-			$liste ='<li><a href="index.php?vue=videotheque&action=aleatoire">Aléatoire</a></li>';
+			$liste ='<li><a href="index.php?vue=videotheque&action=aleatoire">Genre Aléatoire</a></li>';
 			$nb = 1;
 		foreach ($this->lesGenres as $unGenre)
 			{
